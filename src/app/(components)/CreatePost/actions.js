@@ -1,6 +1,6 @@
 export async function createPost(formData, token) {
   try {
-    const res = await fetch("/api/post/create", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/post/create`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
