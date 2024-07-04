@@ -1,20 +1,34 @@
+import { NextResponse } from "next/server";
 import { verifyToken } from "../auth/auth";
 
-export const authMiddleware = (handler) => {
-  return async (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1];
+export function authMiddleware(handler) {
+  return async (req) => {
+    const authHeader = req.headers.get("authorization");
+
+    if (!authHeader) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const token = authHeader.split(" ")[1];
 
     if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const user = verifyToken(token);
 
     if (!user) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    req.user = user; // Attach user info to request
-    return handler(req, res);
+    // Attach user to request
+    req.user = user;
+
+    return handler(req);
   };
+}
+
+// Export default config to apply middleware to specific routes
+export const config = {
+  matcher: ["/api/authCheck", "/api/post/create"], // Apply to specific route or routes
 };

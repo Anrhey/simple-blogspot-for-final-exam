@@ -14,8 +14,42 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  name     String?
-  password String
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name         String?
+  password     String
+  profileImage String?
+  posts        Post[]
+  comments     Comment[]
+  likes        Like[]
+}
+
+model Post {
+  postId   String    @id @default(cuid())
+  title    String?
+  content  String?
+  authorId String?
+  author   User?     @relation(fields: [authorId], references: [id])
+  imageUrl String?
+  comments Comment[]
+  likes    Like[]
+}
+
+model Comment {
+  commentId       String  @id @default(cuid())
+  comment_content String?
+  postId          String?
+  post            Post?   @relation(fields: [postId], references: [postId])
+  authorId        String?
+  author          User?   @relation(fields: [authorId], references: [id])
+}
+
+model Like {
+  likeId String @id @default(cuid())
+  postId String
+  userId String
+  post   Post   @relation(fields: [postId], references: [postId])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
 }

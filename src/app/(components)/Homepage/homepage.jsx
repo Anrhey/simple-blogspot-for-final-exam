@@ -1,11 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosLogOut, IoIosHome, IoIosSettings } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
 import styles from "./styles.module.css";
+import CreatePost from "../CreatePost/createpost";
+import { useQuery } from "@tanstack/react-query";
 
 const Homepage = () => {
+  const token = localStorage.getItem("token");
+  const [posts, setPosts] = useState([]);
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["post"],
+    queryFn: async () => {
+      const res = await fetch("/api/post/fetch-posts", {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setPosts(data);
+      return data;
+    },
+  });
+
+  if (isLoading) <>Loading...</>;
   return (
     <>
       <nav className={styles.navbar}>
@@ -67,28 +88,38 @@ const Homepage = () => {
               className={styles.searchBar}
             />
           </div>
-          <div className={styles.createPostSection}>
+          <CreatePost />
+          {/* <div className={styles.createPostSection}>
             <h2 className={styles.createPostTitle}>Create a Blog Post</h2>
             <input
               className={styles.textarea}
               placeholder="Write your post here..."
             ></input>
             <button className={styles.postButton}>Post</button>
-          </div>
+          </div> */}
 
           {/* Blog Posts */}
           <div className={styles.blogPosts}>
-            {[1, 2, 3, 4, 5].map((post, index) => (
-              <div key={index} className={styles.blogPost}>
-                <div className={styles.blogPostContent}>
-                  Some Created post here. By user or other users
+            {posts
+              .slice()
+              .reverse()
+              .map((post, index) => (
+                <div key={index} className={styles.blogPost}>
+                  <div className={styles.blogPostContent}>
+                    {post.title}
+                    {post.content}
+                    {post.imageUrl.length ? (
+                      <div>
+                        <img src={post.imageUrl} alt="image" />
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className={styles.blogPostFooter}>
+                    <div>Likes here</div>
+                    <div>Comments here</div>
+                  </div>
                 </div>
-                <div className={styles.blogPostFooter}>
-                  <div>Likes here</div>
-                  <div>Comments here</div>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

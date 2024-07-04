@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
 
 const Login = () => {
@@ -7,6 +8,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const router = useRouter();
 
   const handleChange = (e) => {
     setFormData({
@@ -32,7 +34,7 @@ const Login = () => {
       if (token) {
         localStorage.setItem("token", token); // Store token in localStorage
         console.log("Token:", token);
-        // Redirect to a protected page or update the UI
+        router.push("/homepage");
       } else {
         console.error("No token received");
       }
