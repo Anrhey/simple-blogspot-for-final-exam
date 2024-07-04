@@ -30,5 +30,5 @@ export function authMiddleware(handler) {
 
 // Export default config to apply middleware to specific routes
 export const config = {
-  matcher: ["/api/authCheck", "/api/post/create"], // Apply to specific route or routes
+  matcher: ["/api/authCheck", "/api/post/create", "/api/user/me"], // Apply to specific route or routes
 };

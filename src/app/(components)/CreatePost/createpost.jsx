@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "./actions";
 import { UploadButton } from "@/utils/uploadthing";
@@ -10,7 +10,6 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 function CreateBlogPost() {
   const queryClient = useQueryClient();
-  const token = localStorage.getItem("token");
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -18,6 +17,13 @@ function CreateBlogPost() {
   });
   const [isTitleFocused, setIsTitleFocused] = useState(false);
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
 
   const handleTitleFocus = () => {
     setIsTitleFocused(true);

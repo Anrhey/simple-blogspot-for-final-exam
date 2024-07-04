@@ -8,7 +8,13 @@ import CreatePost from "../CreatePost/createpost";
 import { useQuery } from "@tanstack/react-query";
 
 const Homepage = () => {
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
   const [posts, setPosts] = useState([]);
 
   const { data, isLoading, isError } = useQuery({
