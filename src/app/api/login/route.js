@@ -6,16 +6,16 @@ import { comparePassword, signToken } from "../../(utils)/auth/auth";
 
 const prisma = new PrismaClient();
 
-const cors = initMiddleware(
-  Cors({
-    // Only allow requests with these methods
-    methods: ["GET", "POST", "OPTIONS"],
-    origin: "*", // Replace with your frontend URL or '*' to allow all origins
-  })
-);
+// const cors = initMiddleware(
+//   Cors({
+//     // Only allow requests with these methods
+//     methods: ["GET", "POST", "OPTIONS"],
+//     origin: "*", // Replace with your frontend URL or '*' to allow all origins
+//   })
+// );
 
 export async function POST(req) {
-  await cors(req, res); // Run the middleware
+  //await cors(req, NextResponse); // Run the middleware
 
   const { email, password } = await req.json();
 
