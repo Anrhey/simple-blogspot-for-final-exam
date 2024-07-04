@@ -1,10 +1,22 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import Cors from "cors";
+import initMiddleware from "../../(lib)/init-middleware";
 import { comparePassword, signToken } from "../../(utils)/auth/auth";
 
 const prisma = new PrismaClient();
 
+const cors = initMiddleware(
+  Cors({
+    // Only allow requests with these methods
+    methods: ["GET", "POST", "OPTIONS"],
+    origin: "*", // Replace with your frontend URL or '*' to allow all origins
+  })
+);
+
 export async function POST(req) {
+  await cors(req, res); // Run the middleware
+
   const { email, password } = await req.json();
 
   const user = await prisma.user.findUnique({
