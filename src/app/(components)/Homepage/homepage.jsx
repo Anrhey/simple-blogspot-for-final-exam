@@ -3,9 +3,22 @@
 import React, { useEffect, useState } from "react";
 import { IoIosLogOut, IoIosHome, IoIosSettings } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
-import styles from "./styles.module.css";
-import CreatePost from "../CreatePost/createpost";
+import {
+  Box,
+  Container,
+  IconButton,
+  InputBase,
+  Paper,
+  Typography,
+  Grid,
+  Avatar,
+  Divider,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import ProfileCard from "../Profile/ProfileCard"; // Assume this is your previously created ProfileCard component
+import CreatePost from "../CreatePost/createpost"; // Assume this is your previously created CreatePost component
 
 const Homepage = () => {
   const [token, setToken] = useState(null);
@@ -15,6 +28,7 @@ const Homepage = () => {
       setToken(localStorage.getItem("token"));
     }
   }, []);
+
   const [posts, setPosts] = useState([]);
 
   const { data, isLoading, isError } = useQuery({
@@ -32,103 +46,70 @@ const Homepage = () => {
     },
   });
 
-  if (isLoading) <>Loading...</>;
+  if (isLoading) return <CircularProgress />;
+  if (isError) return <div>Error loading posts</div>;
+
   return (
     <>
-      <nav className={styles.navbar}>
-        <ul className={styles.navList}>
-          <li className={styles.navItem}>
-            <a
-              href="#"
-              className={styles.navLink}
-              onClick={() => console.log("home")}
-            >
-              <IoIosHome size={40} />
-            </a>
-          </li>
-          <li className={styles.navItem}>
-            <a
-              href="#"
-              className={styles.navLink}
-              onClick={() => console.log("profile")}
-            >
-              <FaUserAlt size={40} />
-            </a>
-          </li>
-          <li className={styles.navItem}>
-            <a
-              href="#"
-              className={styles.navLink}
-              onClick={() => console.log("settings")}
-            >
-              <IoIosSettings size={40} />
-            </a>
-          </li>
-          <li className={styles.navItem}>
-            <a
-              href="#"
-              className={styles.navLink}
-              onClick={() => console.log("logout")}
-            >
-              <IoIosLogOut size={40} />
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <Container sx={{ mt: 4 }}>
+        <Grid container spacing={4}>
+          {/* Profile Section */}
+          <Grid item xs={12} md={4}>
+            <ProfileCard />
+          </Grid>
 
-      <div className={styles.container}>
-        {/* Profile Section */}
-        <div className={styles.profileSection}>
-          <div className={styles.profileContent}>
-            <img className={styles.profilePicture} alt={"userimage"} />
-            <h2 className={styles.profileUsername}>Username here</h2>
-          </div>
-        </div>
+          {/* Main Content Section */}
+          <Grid item xs={12} md={8}>
+            <Paper
+              component="form"
+              sx={{
+                p: "2px 4px",
+                display: "flex",
+                alignItems: "center",
+                mb: 4,
+              }}
+            >
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search for post..."
+              />
+            </Paper>
 
-        {/* Main Content Section */}
-        <div className={styles.mainContent}>
-          <div className={styles.searchSection}>
-            <input
-              type="text"
-              placeholder="Search for post..."
-              className={styles.searchBar}
-            />
-          </div>
-          <CreatePost />
-          {/* <div className={styles.createPostSection}>
-            <h2 className={styles.createPostTitle}>Create a Blog Post</h2>
-            <input
-              className={styles.textarea}
-              placeholder="Write your post here..."
-            ></input>
-            <button className={styles.postButton}>Post</button>
-          </div> */}
+            <CreatePost />
 
-          {/* Blog Posts */}
-          <div className={styles.blogPosts}>
-            {posts
-              .slice()
-              .reverse()
-              .map((post, index) => (
-                <div key={index} className={styles.blogPost}>
-                  <div className={styles.blogPostContent}>
-                    {post.title}
-                    {post.content}
+            {/* Blog Posts */}
+            <Box sx={{ mt: 4 }}>
+              {posts
+                .slice()
+                .reverse()
+                .map((post, index) => (
+                  <Paper key={index} sx={{ p: 2, mb: 2 }}>
+                    <Avatar />
+                    <Typography variant="h5">{post.author.name}</Typography>
+                    <Typography variant="h6">{post.title}</Typography>
+                    <Typography variant="body1">{post.content}</Typography>
                     {post.imageUrl.length ? (
-                      <div>
-                        <img src={post.imageUrl} alt="image" />
-                      </div>
+                      <Box sx={{ mt: 2 }}>
+                        <img
+                          src={post.imageUrl}
+                          alt="image"
+                          style={{ maxWidth: "100%", borderRadius: 4 }}
+                        />
+                      </Box>
                     ) : null}
-                  </div>
-                  <div className={styles.blogPostFooter}>
-                    <div>Likes here</div>
-                    <div>Comments here</div>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
+                    <Divider sx={{ my: 2 }} />
+                    <Box
+                      sx={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <Typography variant="body2">Likes here</Typography>
+                      <Typography variant="body2">Comments here</Typography>
+                    </Box>
+                  </Paper>
+                ))}
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
 };

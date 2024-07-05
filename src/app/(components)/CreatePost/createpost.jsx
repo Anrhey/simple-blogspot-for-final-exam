@@ -139,7 +139,12 @@ function CreateBlogPost() {
             ) : null}
             {/* <input hidden name="imageUrl" accept="image/*" type="file" /> */}
           </IconButton>
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            disabled={mutation.isPending}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
             Post
           </Button>
         </Box>

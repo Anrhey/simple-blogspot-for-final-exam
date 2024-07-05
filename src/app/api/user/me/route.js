@@ -15,6 +15,7 @@ const handler = async (req) => {
       email: true,
       name: true,
       profileImage: true,
+      posts: true,
     },
   });
 

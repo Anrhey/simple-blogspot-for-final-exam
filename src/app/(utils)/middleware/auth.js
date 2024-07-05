@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { verifyToken } from "../auth/auth";
 
 export function authMiddleware(handler) {
-  return async (req) => {
+  return async (req, params) => {
     const authHeader = req.headers.get("authorization");
 
     if (!authHeader) {
@@ -24,11 +24,6 @@ export function authMiddleware(handler) {
     // Attach user to request
     req.user = user;
 
-    return handler(req);
+    return handler(req, params);
   };
 }
-
-// Export default config to apply middleware to specific routes
-export const config = {
-  matcher: ["/api/authCheck", "/api/post/create", "/api/user/me"], // Apply to specific route or routes
-};
