@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadButton } from "../../../utils/uploadthing";
 import { useParams, useRouter } from "next/navigation";
 import { fetchUser, updateUser } from "./actions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadButton } from "../../../utils/uploadthing";
 import { Avatar } from "@mui/material";
 import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
