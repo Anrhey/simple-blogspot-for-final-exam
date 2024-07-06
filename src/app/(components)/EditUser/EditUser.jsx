@@ -1,19 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
-import { UploadButton } from "@/utils/uploadthing";
-import { Avatar } from "@mui/material";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
+import { UploadButton } from "@/utils/uploadthing";
+import { useParams, useRouter } from "next/navigation";
+import { fetchUser, updateUser } from "./actions";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-const RegistrationPage = () => {
+const EditUser = () => {
+  const [token, setToken] = useState(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     email: "",
     name: "",
-    password: "",
     profileImage: "",
   });
+
+  const { id } = useParams();
 
   const handleChange = (e) => {
     setFormData({
@@ -22,25 +33,32 @@ const RegistrationPage = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: () => fetchUser(id, token),
+  });
 
-    try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(formData),
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        email: data.userData.email || "",
+        name: data.userData.name || "",
+        profileImage: data.userData.profileImage || "",
       });
-
-      const data = await res.json();
-      console.log(data);
-      router.push("/login");
-      return data;
-    } catch (error) {
-      console.log(error);
     }
+  }, [data]);
+
+  const mutation = useMutation({
+    mutationFn: () => updateUser(id, token, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries("currentUser");
+      router.push("/profile-feed");
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutation.mutate();
   };
 
   return (
@@ -50,15 +68,17 @@ const RegistrationPage = () => {
         <form onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>
-              Email:
+              Email: {"(Email cant be edited)"}
             </label>
             <input
               type="email"
               id="email"
               name="email"
+              value={formData.email}
               onChange={handleChange}
               className={styles.input}
-              placeholder="Email"
+              placeholder="Email cant be edited"
+              disabled
             />
           </div>
           <div className={styles.inputGroup}>
@@ -69,6 +89,7 @@ const RegistrationPage = () => {
               type="text"
               id="name"
               name="name"
+              value={formData.name}
               onChange={handleChange}
               className={styles.input}
               placeholder="Name"
@@ -80,11 +101,7 @@ const RegistrationPage = () => {
               onClientUploadComplete={(res) => {
                 // Do something with the response
                 console.log("Files: ", res);
-                //setFormData({ profileImage: res[0].url });
-                setFormData((prevData) => ({
-                  ...prevData,
-                  profileImage: res[0].url,
-                }));
+                setFormData({ profileImage: res[0].url });
               }}
               onUploadError={(error) => {
                 // Do something with the error.
@@ -93,45 +110,23 @@ const RegistrationPage = () => {
             />
             {formData.profileImage.length ? (
               <div>
-                <Avatar
+                <img
                   src={formData.profileImage}
                   alt="my image"
                   className={styles.image}
-                  name="profileImage"
-                  // value={formData.profileImage}
-                  key={formData.profileImage}
+                  value={formData.profileImage}
                 />
               </div>
-            ) : (
-              "Click the upload button above to upload profile picture"
-            )}
+            ) : null}
           </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>
-              Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={handleChange}
-              className={styles.input}
-              placeholder="Password"
-            />
-          </div>
+
           <button type="submit" className={styles.loginButton}>
-            Register
+            Update Details
           </button>
         </form>
-        <p className={styles.signup}>
-          Already have an account?{" "}
-          <a href="/login" className={styles.signupLink}>
-            Sign in here
-          </a>
-        </p>
       </div>
     </div>
   );
 };
 
-export default RegistrationPage;
+export default EditUser;

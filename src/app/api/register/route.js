@@ -5,7 +5,15 @@ import { hashPassword } from "../../(utils)/auth/auth";
 const prisma = new PrismaClient();
 
 export async function POST(req) {
-  const { email, name, password } = await req.json();
+  const { email, name, password, profileImage } = await req.json();
+
+  if (!email || !name || !password) {
+    return NextResponse.json(
+      { message: "Missing required fields" },
+      { status: 400 }
+    );
+  }
+
   const hashedPassword = await hashPassword(password);
 
   try {
@@ -14,6 +22,7 @@ export async function POST(req) {
         email,
         name,
         password: hashedPassword,
+        profileImage,
       },
     });
     return NextResponse.json(user);

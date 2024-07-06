@@ -43,8 +43,6 @@ function ProfileCard() {
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 3,
-        //height: "100vh",
-        //backgroundColor: "#e0e0e0",
       }}
     >
       <Card
@@ -72,6 +70,7 @@ function ProfileCard() {
               backgroundColor: "#e91e63",
               margin: "1rem",
             }}
+            src={data.userData.profileImage}
           />
         </Box>
         <CardContent sx={{ mt: -6 }}>
@@ -84,12 +83,6 @@ function ProfileCard() {
           </Typography>
           <Typography variant="body2" color="inherit">
             {data.userData.email}
-          </Typography>
-          <Typography variant="body2" color="inherit" sx={{ mt: 1 }}>
-            <Link href={"/profile-feed"}>
-              {" "}
-              {data.userData.posts.length} posts{" "}
-            </Link>
           </Typography>
           <Box
             sx={{ mt: 2, display: "flex", justifyContent: "center", gap: 1 }}
@@ -106,7 +99,7 @@ function ProfileCard() {
               <HomeIcon />
             </IconButton>
             <IconButton
-              href="#"
+              href={"/profile-feed"}
               sx={{
                 color: "white",
                 backgroundColor: "#e91e63",
@@ -117,7 +110,7 @@ function ProfileCard() {
               <AccountCircleIcon />
             </IconButton>
             <IconButton
-              href="#"
+              href={`/EditUser/${data.userData.id}`}
               sx={{
                 color: "white",
                 backgroundColor: "#e91e63",
@@ -151,7 +144,8 @@ function ProfileCard() {
           }}
         >
           <Typography variant="body2" sx={{ color: "white" }}>
-            120k Followers | 10k Following
+            {" "}
+            {data.userData.posts.length} posts{" "}
           </Typography>
         </Box>
       </Card>

@@ -1,5 +1,5 @@
 import React from "react";
-import EditPost from "@/app/(components)/EditPost/Editpost";
+import EditPost from "../../(components)/EditPost/Editpost";
 
 const EditPage = () => {
   return (

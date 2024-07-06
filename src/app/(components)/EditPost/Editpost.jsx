@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadButton } from "../../../utils/uploadthing";
 import { TextField, Button, Box, Typography, IconButton } from "@mui/material";
 import styles from "./styles.module.css";
 import UploadFileIcon from "@mui/icons-material/UploadFile";

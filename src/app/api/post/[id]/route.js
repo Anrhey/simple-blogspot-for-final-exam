@@ -33,6 +33,7 @@ async function getHandler(req, { params }) {
             commentId: true,
           },
         },
+        likes: true,
       },
     });
 
