@@ -11,7 +11,6 @@ import Link from "next/link";
 import { updatePost, fetchPostByID, deletePost } from "./actions";
 
 function EditPost() {
-  //   const [token, setToken] = useState(null);
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     title: "",
@@ -22,13 +21,12 @@ function EditPost() {
   const { id } = useParams();
   const router = useRouter();
 
-  //   useEffect(() => {
-  //     if (typeof window !== "undefined") {
-  //       setToken(localStorage.getItem("token"));
-  //     }
-  //   }, []);
-
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
   console.log("token from edit post", token);
 
   const { data, isLoading, isError } = useQuery({

@@ -25,7 +25,12 @@ const ViewFullPost = () => {
     comment_content: "",
     postId: id,
   });
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
   const queryClient = useQueryClient();
 
   const handleChange = (e) => {

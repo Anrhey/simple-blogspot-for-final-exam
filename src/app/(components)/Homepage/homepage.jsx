@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -21,7 +21,13 @@ import SearchPosts from "../SearchPost/SearchPost";
 import { likePost, fetchPost } from "./actions";
 
 const Homepage = () => {
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
+
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
