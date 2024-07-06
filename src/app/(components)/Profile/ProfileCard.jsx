@@ -17,15 +17,10 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "./actions";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function ProfileCard() {
-  //   const [token, setToken] = useState(null);
-
-  //   useEffect(() => {
-  //     if (typeof window !== "undefined") {
-  //       setToken(localStorage.getItem("token"));
-  //     }
-  //   }, []);
+  const router = useRouter();
 
   const token = localStorage.getItem("token");
 
@@ -33,6 +28,11 @@ function ProfileCard() {
     queryKey: ["user"],
     queryFn: () => fetchUser(token),
   });
+
+  const handleLogout = () => {
+    router.push("/login");
+    localStorage.removeItem("token");
+  };
 
   if (isLoading) return <h2>Loading...</h2>;
 
@@ -128,7 +128,7 @@ function ProfileCard() {
               <SettingsIcon />
             </IconButton>
             <IconButton
-              href="#"
+              onClick={handleLogout}
               sx={{
                 color: "white",
                 backgroundColor: "#e91e63",

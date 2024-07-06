@@ -1,50 +1,46 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { IoIosLogOut, IoIosHome, IoIosSettings } from "react-icons/io";
-import { FaUserAlt } from "react-icons/fa";
+import React from "react";
 import {
   Box,
   Container,
   IconButton,
-  InputBase,
   Paper,
   Typography,
   Grid,
   Avatar,
   Divider,
-  Button,
   CircularProgress,
+  Tooltip,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import ProfileCard from "../Profile/ProfileCard"; // Assume this is your previously created ProfileCard component
-import CreatePost from "../CreatePost/createpost"; // Assume this is your previously created CreatePost component
+import { ThumbUp } from "@mui/icons-material";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import ProfileCard from "../Profile/ProfileCard";
+import CreatePost from "../CreatePost/createpost";
+import SearchPosts from "../SearchPost/SearchPost";
+import { likePost, fetchPost } from "./actions";
 
 const Homepage = () => {
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token"));
-    }
-  }, []);
-
-  const [posts, setPosts] = useState([]);
+  const token = localStorage.getItem("token");
+  const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["post"],
-    queryFn: async () => {
-      const res = await fetch("/api/post/fetch-posts", {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
-      const data = await res.json();
-      setPosts(data);
-      return data;
+    queryKey: ["posts"],
+    queryFn: async () => await fetchPost(),
+  });
+
+  const likeMutation = useMutation({
+    mutationFn: async (postId) => {
+      await likePost(postId, token);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
     },
   });
+
+  const handleLike = async (postId) => {
+    await likeMutation.mutateAsync(postId);
+  };
 
   if (isLoading) return <CircularProgress />;
   if (isError) return <div>Error loading posts</div>;
@@ -69,17 +65,14 @@ const Homepage = () => {
                 mb: 4,
               }}
             >
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Search for post..."
-              />
+              <SearchPosts />
             </Paper>
 
             <CreatePost />
 
             {/* Blog Posts */}
             <Box sx={{ mt: 4 }}>
-              {posts
+              {data
                 .slice()
                 .reverse()
                 .map((post, index) => (
@@ -101,8 +94,21 @@ const Homepage = () => {
                     <Box
                       sx={{ display: "flex", justifyContent: "space-between" }}
                     >
-                      <Typography variant="body2">Likes here</Typography>
-                      <Typography variant="body2">Comments here</Typography>
+                      <Typography variant="body2">
+                        <IconButton
+                          onClick={() => handleLike(post.postId)}
+                          aria-label="like"
+                          color="primary"
+                          size="medium"
+                        >
+                          <Tooltip title="Like" placement="top">
+                            <ThumbUp /> {post.likes.length}
+                          </Tooltip>
+                        </IconButton>
+                      </Typography>
+                      <Typography variant="body2">
+                        {post.comments.length} Comments
+                      </Typography>
                     </Box>
                   </Paper>
                 ))}

@@ -15,6 +15,20 @@ export async function GET() {
             profileImage: true,
           },
         },
+        comments: {
+          select: {
+            comment_content: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                profileImage: true,
+              },
+            },
+            commentId: true,
+          },
+        },
+        likes: true,
       },
     });
 

@@ -12,6 +12,28 @@ async function getHandler(req, { params }) {
       where: {
         postId: id,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            profileImage: true,
+          },
+        },
+        comments: {
+          select: {
+            comment_content: true,
+            author: {
+              select: {
+                id: true,
+                name: true,
+                profileImage: true,
+              },
+            },
+            commentId: true,
+          },
+        },
+      },
     });
 
     console.log(fetchPost);
