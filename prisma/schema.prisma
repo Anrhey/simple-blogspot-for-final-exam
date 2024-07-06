@@ -45,11 +45,12 @@ model Comment {
 }
 
 model Like {
-  likeId String @id @default(cuid())
-  postId String
-  userId String
-  post   Post   @relation(fields: [postId], references: [postId])
-  user   User   @relation(fields: [userId], references: [id])
+  likeId  String  @id @default(cuid())
+  postId  String
+  userId  String
+  isLiked Boolean @default(false)
+  post    Post    @relation(fields: [postId], references: [postId])
+  user    User    @relation(fields: [userId], references: [id])
 
   @@unique([postId, userId])
 }

@@ -13,7 +13,7 @@ import {
   CircularProgress,
   Tooltip,
 } from "@mui/material";
-import { ThumbUp } from "@mui/icons-material";
+import { ThumbUp, ThumbDown } from "@mui/icons-material";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import ProfileCard from "../Profile/ProfileCard";
 import CreatePost from "../CreatePost/createpost";
@@ -44,8 +44,29 @@ const Homepage = () => {
     },
   });
 
-  const handleLike = async (postId) => {
+  const handleLikeToggle = async (postId) => {
     await likeMutation.mutateAsync(postId);
+  };
+
+  const renderLikeButton = (post) => {
+    const userLike = post.likes.find((like) => like.userId === parseInt(token));
+
+    return (
+      <IconButton
+        onClick={() => handleLikeToggle(post.postId)}
+        aria-label={userLike && userLike.isLiked ? "unlike" : "like"}
+        color="primary"
+        size="medium"
+      >
+        <Tooltip
+          title={userLike && userLike.isLiked ? "Unlike" : "Like"}
+          placement="top"
+        >
+          {userLike && userLike.isLiked ? <ThumbDown /> : <ThumbUp />}
+          {post.likes.filter((like) => like.isLiked).length}
+        </Tooltip>
+      </IconButton>
+    );
   };
 
   if (isLoading) return <CircularProgress />;
@@ -101,16 +122,7 @@ const Homepage = () => {
                       sx={{ display: "flex", justifyContent: "space-between" }}
                     >
                       <Typography variant="body2">
-                        <IconButton
-                          onClick={() => handleLike(post.postId)}
-                          aria-label="like"
-                          color="primary"
-                          size="medium"
-                        >
-                          <Tooltip title="Like" placement="top">
-                            <ThumbUp /> {post.likes.length}
-                          </Tooltip>
-                        </IconButton>
+                        {renderLikeButton(post)}
                       </Typography>
                       <Typography variant="body2">
                         {post.comments.length} Comments
