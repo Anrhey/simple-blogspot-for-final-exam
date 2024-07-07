@@ -21,8 +21,13 @@ import { useRouter } from "next/navigation";
 
 function ProfileCard() {
   const router = useRouter();
+  const [token, setToken] = useState(null);
 
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["user"],
