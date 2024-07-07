@@ -44,7 +44,7 @@ const ViewFullPost = () => {
   const mutation = useMutation({
     mutationFn: () => addComment(token, formData, id),
     onSuccess: () => {
-      queryClient.invalidateQueries("viewedPost");
+      queryClient.invalidateQueries(["viewedPost"]);
       setFormData({ ...formData, comment_content: "" });
     },
   });

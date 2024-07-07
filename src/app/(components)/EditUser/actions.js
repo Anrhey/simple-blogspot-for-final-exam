@@ -2,7 +2,6 @@ export async function fetchUser(id, token) {
   try {
     const res = await fetch(`/api/fetch-current-user/${id}`, {
       method: "GET",
-      mode: "no-cors",
       headers: {
         // "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -20,7 +19,6 @@ export async function fetchUser(id, token) {
 export async function updateUser(id, token, formData) {
   const res = await fetch(`/api/edit-user/${id}`, {
     method: "PUT",
-    mode: "no-cors",
     headers: {
       "Content-type": "application/json",
       Authorization: `Bearer ${token}`,

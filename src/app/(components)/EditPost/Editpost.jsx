@@ -66,7 +66,7 @@ function EditPost() {
   const mutation = useMutation({
     mutationFn: () => updatePost(formData, token, id),
     onSuccess: () => {
-      queryClient.invalidateQueries("post");
+      queryClient.invalidateQueries(["posts"]);
       setSuccessMessage(true);
       router.push(`/profile-feed`);
     },

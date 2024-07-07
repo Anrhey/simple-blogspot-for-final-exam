@@ -51,7 +51,7 @@ const EditUser = () => {
   const mutation = useMutation({
     mutationFn: () => updateUser(id, token, formData),
     onSuccess: () => {
-      queryClient.invalidateQueries("currentUser");
+      queryClient.invalidateQueries(["currentUser"]);
       router.push("/profile-feed");
     },
   });
