@@ -31,6 +31,7 @@ const RegistrationPage = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/register`,
         {
           method: "POST",
+          mode: "no-cors",
           headers: {
             "Content-type": "application/json",
           },

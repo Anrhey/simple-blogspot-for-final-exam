@@ -27,6 +27,7 @@ const Login = () => {
         // `https://simple-blogspot-for-final-exam-k0l59qby8-anrheys-projects.vercel.app/api/login`,
         {
           method: "POST",
+          mode: "no-cors",
           headers: {
             "Content-type": "application/json",
           },
