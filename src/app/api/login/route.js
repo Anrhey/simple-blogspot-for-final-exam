@@ -14,25 +14,25 @@ const prisma = new PrismaClient();
 //   })
 // );
 
-const allowedOrigins = [
-  "https://simple-blogspot-for-final-exam-ob5lak88j-anrheys-projects.vercel.app",
-  "https://simple-blogspot-for-final-exam-k0l59qby8-anrheys-projects.vercel.app",
-];
+// const allowedOrigins = [
+//   "https://simple-blogspot-for-final-exam-ob5lak88j-anrheys-projects.vercel.app",
+//   "https://simple-blogspot-for-final-exam-k0l59qby8-anrheys-projects.vercel.app",
+// ];
 
 export async function POST(req) {
   //await cors(req, NextResponse); // Run the middleware
   //await runMiddleware(req, NextResponse, cors);
   // Set CORS headers to allow all origins
-  NextResponse.setHeader("Access-Control-Allow-Credentials", true);
-  NextResponse.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
-  NextResponse.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-  );
-  NextResponse.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-  );
+  // NextResponse.setHeader("Access-Control-Allow-Credentials", true);
+  // NextResponse.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
+  // NextResponse.setHeader(
+  //   "Access-Control-Allow-Methods",
+  //   "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  // );
+  // NextResponse.setHeader(
+  //   "Access-Control-Allow-Headers",
+  //   "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  // );
 
   // Handle preflight request
   if (req.method === "OPTIONS") {

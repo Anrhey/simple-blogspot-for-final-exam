@@ -49,7 +49,7 @@ async function getHandler(req, { params }) {
 }
 
 async function putHandler(req, { params }) {
-  const { id } = params;
+  const id = params.id;
   const { title, content, imageUrl } = await req.json();
 
   try {
@@ -76,7 +76,7 @@ async function putHandler(req, { params }) {
 }
 
 async function deleteHandler(req, { params }) {
-  const { id } = params;
+  const id = params.id;
 
   try {
     const deletePost = await prisma.post.delete({
