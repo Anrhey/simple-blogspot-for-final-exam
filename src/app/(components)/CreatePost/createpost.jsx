@@ -68,7 +68,7 @@ function CreateBlogPost() {
   const mutation = useMutation({
     mutationFn: () => createPost(formData, token),
     onSuccess: () => {
-      queryClient.invalidateQueries("post");
+      queryClient.invalidateQueries("posts");
       setSuccessMessage(true);
     },
   });
