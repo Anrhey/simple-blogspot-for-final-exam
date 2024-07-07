@@ -75,8 +75,8 @@ function ProfileCard() {
               backgroundColor: "#e91e63",
               margin: "1rem",
             }}
-            src={data.userData.profileImage}
-            alt={data.userData.name}
+            src={data?.userData?.profileImage}
+            alt={data?.userData?.name}
           />
         </Box>
         <CardContent sx={{ mt: -6 }}>
@@ -85,10 +85,10 @@ function ProfileCard() {
             component="div"
             sx={{ fontWeight: "bold", color: "#e91e63" }}
           >
-            {data.userData.name}
+            {data?.userData?.name}
           </Typography>
           <Typography variant="body2" color="inherit">
-            {data.userData.email}
+            {data?.userData?.email}
           </Typography>
           <Box
             sx={{ mt: 2, display: "flex", justifyContent: "center", gap: 1 }}
@@ -116,7 +116,7 @@ function ProfileCard() {
               <AccountCircleIcon />
             </IconButton>
             <IconButton
-              href={`/EditUser/${data.userData.id}`}
+              href={`/EditUser/${data?.userData?.id}`}
               sx={{
                 color: "white",
                 backgroundColor: "#e91e63",
@@ -151,7 +151,7 @@ function ProfileCard() {
         >
           <Typography variant="body2" sx={{ color: "white" }}>
             {" "}
-            {data.userData.posts.length} posts{" "}
+            {data?.userData?.posts.length} posts{" "}
           </Typography>
         </Box>
       </Card>
