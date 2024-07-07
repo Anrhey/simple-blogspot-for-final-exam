@@ -3,7 +3,7 @@ import { verifyToken } from "../auth/auth";
 
 export function authMiddleware(handler) {
   return async (req, params) => {
-    const authHeader = req.headers.get("authorization");
+    const authHeader = req.headers.get("Authorization");
 
     if (!authHeader) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
