@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `/api/login`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
         // `https://simple-blogspot-for-final-exam-k0l59qby8-anrheys-projects.vercel.app/api/login`,
         {
           method: "POST",
