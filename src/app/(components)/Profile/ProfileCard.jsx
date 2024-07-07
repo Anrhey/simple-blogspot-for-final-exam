@@ -71,6 +71,7 @@ function ProfileCard() {
               margin: "1rem",
             }}
             src={data.userData.profileImage}
+            alt={data.userData.name}
           />
         </Box>
         <CardContent sx={{ mt: -6 }}>
