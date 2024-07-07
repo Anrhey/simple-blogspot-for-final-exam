@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { authMiddleware } from "@/app/(utils)/middleware/auth";
+import { authMiddleware } from "../../(utils)/middleware/auth";
 
 //const prisma = new PrismaClient();
 
