@@ -1,49 +1,29 @@
-// authMiddleware.js
-import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
+import { verifyToken } from "../auth/auth";
 
-export const authMiddleware = (handler) => async (req, res, params) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "No token provided" });
-  }
+export function authMiddleware(handler) {
+  return async (req, params) => {
+    const authHeader = req.headers.get("authorization");
 
-  const token = authHeader.split(" ")[1];
+    if (!authHeader) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Attach decoded user to request object
-    return handler(req, res, params);
-  } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
-  }
-};
+    const token = authHeader.split(" ")[1];
 
-// import { NextResponse } from "next/server";
-// import { verifyToken } from "../auth/auth";
+    if (!token) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
-// export function authMiddleware(handler) {
-//   return async (req, params) => {
-//     const authHeader = req.headers.get("authorization");
+    const user = verifyToken(token);
 
-//     if (!authHeader) {
-//       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-//     }
+    if (!user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
-//     const token = authHeader.split(" ")[1];
+    // Attach user to request
+    req.user = user;
 
-//     if (!token) {
-//       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-//     }
-
-//     const user = verifyToken(token);
-
-//     if (!user) {
-//       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-//     }
-
-//     // Attach user to request
-//     req.user = user;
-
-//     return handler(req, params);
-//   };
-// }
+    return handler(req, params);
+  };
+}
