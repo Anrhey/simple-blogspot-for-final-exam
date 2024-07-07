@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-import Cors from "cors";
+import cors, { runMiddleware } from "../../(utils)/cors/cors";
 import initMiddleware from "../../(lib)/init-middleware";
 import { comparePassword, signToken } from "../../(utils)/auth/auth";
 
@@ -16,7 +16,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req) {
   //await cors(req, NextResponse); // Run the middleware
-
+  await runMiddleware(req, NextResponse, cors);
   const { email, password } = await req.json();
 
   const user = await prisma.user.findUnique({
