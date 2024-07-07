@@ -2,9 +2,8 @@ export async function fetchUser(token) {
   try {
     const res = await fetch("/api/user/me", {
       method: "GET",
-      mode: "no-cors",
       headers: {
-        "Content-type": "application.json",
+        "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });

@@ -2,7 +2,6 @@ export async function createPost(formData, token) {
   try {
     const res = await fetch(`/api/post/create`, {
       method: "POST",
-      mode: "no-cors",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
