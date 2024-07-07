@@ -43,11 +43,17 @@ const Homepage = () => {
     queryFn: async () => await fetchPost(),
   });
 
+  const [currentLikePostId, setCurrentLikePostId] = useState(null);
+
   const likeMutation = useMutation({
     mutationFn: async (postId) => {
       await likePost(postId, token);
     },
-    onSuccess: () => {
+    onMutate: (postId) => {
+      setCurrentLikePostId(postId);
+    },
+    onSettled: () => {
+      setCurrentLikePostId(null);
       queryClient.invalidateQueries(["posts"]);
     },
   });
@@ -70,7 +76,13 @@ const Homepage = () => {
           title={userLike && userLike.isLiked ? "Unlike" : "Like"}
           placement="top"
         >
-          {userLike && userLike.isLiked ? <ThumbDown /> : <ThumbUp />}
+          {currentLikePostId === post.postId ? (
+            <CircularProgress size={24} />
+          ) : userLike && userLike.isLiked ? (
+            <ThumbDown />
+          ) : (
+            <ThumbUp />
+          )}
           {post.likes.filter((like) => like.isLiked).length}
         </Tooltip>
       </IconButton>
@@ -173,6 +185,12 @@ export default Homepage;
 //   Divider,
 //   CircularProgress,
 //   Tooltip,
+//   Card,
+//   CardContent,
+//   CardHeader,
+//   CardMedia,
+//   CardActions,
+//   Button,
 // } from "@mui/material";
 // import { ThumbUp, ThumbDown } from "@mui/icons-material";
 // import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -184,6 +202,7 @@ export default Homepage;
 
 // const Homepage = () => {
 //   const [token, setToken] = useState(null);
+
 //   useEffect(() => {
 //     if (typeof window !== "undefined") {
 //       setToken(localStorage.getItem("token"));
@@ -265,39 +284,43 @@ export default Homepage;
 //                 .slice()
 //                 .reverse()
 //                 .map((post, index) => (
-//                   <>
-//                     <Paper key={index} sx={{ p: 2, mb: 2 }}>
-//                       <Link href={`/ViewPost/${post.postId}`}>
-//                         <Avatar src={post.author.profileImage} />
-//                         <Typography variant="h5">{post.author.name}</Typography>
-//                         <Typography variant="h6">{post.title}</Typography>
-//                         <Typography variant="body1">{post.content}</Typography>
-//                       </Link>
-//                       {post.imageUrl.length ? (
-//                         <Box sx={{ mt: 2 }}>
-//                           <img
-//                             src={post.imageUrl}
-//                             alt="image"
-//                             style={{ maxWidth: "100%", borderRadius: 4 }}
-//                           />
-//                         </Box>
-//                       ) : null}
-//                       <Divider sx={{ my: 2 }} />
-//                       <Box
+//                   <Card key={index} sx={{ mb: 4 }}>
+//                     <Link href={`/ViewPost/${post.postId}`} passHref>
+//                       <CardHeader
+//                         avatar={<Avatar src={post.author.profileImage} />}
+//                         title={post.author.name}
+//                         subheader={new Date(
+//                           post.createdAt
+//                         ).toLocaleDateString()}
+//                       />
+//                       <CardContent>
+//                         <Typography variant="h5" component="div">
+//                           {post.title}
+//                         </Typography>
+//                         <Typography variant="body2" color="text.secondary">
+//                           {post.content}
+//                         </Typography>
+//                       </CardContent>
+//                     </Link>
+//                     {post.imageUrl && (
+//                       <CardMedia
+//                         component="img"
+//                         height="194"
+//                         image={post.imageUrl}
+//                         alt={post.title}
 //                         sx={{
-//                           display: "flex",
-//                           justifyContent: "space-between",
+//                           padding: 1,
 //                         }}
-//                       >
-//                         <Typography variant="body2">
-//                           {renderLikeButton(post)}
-//                         </Typography>
-//                         <Typography variant="body2">
-//                           {post.comments.length} Comments
-//                         </Typography>
-//                       </Box>
-//                     </Paper>
-//                   </>
+//                       />
+//                     )}
+
+//                     <CardActions disableSpacing>
+//                       {renderLikeButton(post)}
+//                       <Button size="small" color="primary">
+//                         {post.comments.length} Comments
+//                       </Button>
+//                     </CardActions>
+//                   </Card>
 //                 ))}
 //             </Box>
 //           </Grid>
