@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { hashPassword } from "../../(utils)/auth/auth";
-import cors from "../../(lib)/cors";
+import cors from "../../(utils)/cors";
 
 const prisma = new PrismaClient();
 
