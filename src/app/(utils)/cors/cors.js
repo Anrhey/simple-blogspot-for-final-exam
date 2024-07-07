@@ -1,18 +1,14 @@
+// lib/cors.js
+import initMiddleware from "./init-middleware";
 import Cors from "cors";
 
-const cors = Cors({
-  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-});
-
-export function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
+// Initialize the cors middleware
+const cors = initMiddleware(
+  Cors({
+    // Only allow requests with these methods
+    methods: ["GET", "POST", "OPTIONS"],
+    origin: ["https://simple-blogspot-for-final-exam.vercel.app"], // Add your Vercel domain
+  })
+);
 
 export default cors;

@@ -1,10 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { hashPassword } from "../../(utils)/auth/auth";
+import cors from "../../(lib)/cors";
 
 const prisma = new PrismaClient();
 
 export async function POST(req) {
+  await cors(req, NextResponse); // Run the CORS middleware
   const { email, name, password, profileImage } = await req.json();
 
   if (!email || !name || !password) {
