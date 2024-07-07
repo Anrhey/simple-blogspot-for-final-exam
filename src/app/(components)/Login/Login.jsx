@@ -26,6 +26,7 @@ const Login = () => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
         {
           method: "POST",
+          credentials: "include",
           headers: {
             "Content-type": "application/json",
           },

@@ -14,9 +14,19 @@ const prisma = new PrismaClient();
 //   })
 // );
 
+const allowedOrigins = [
+  "https://simple-blogspot-for-final-exam-ob5lak88j-anrheys-projects.vercel.app",
+  "https://simple-blogspot-for-final-exam-k0l59qby8-anrheys-projects.vercel.app",
+];
+
 export async function POST(req) {
   //await cors(req, NextResponse); // Run the middleware
-  await runMiddleware(req, NextResponse, cors);
+  //await runMiddleware(req, NextResponse, cors);
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
   const { email, password } = await req.json();
 
   const user = await prisma.user.findUnique({
