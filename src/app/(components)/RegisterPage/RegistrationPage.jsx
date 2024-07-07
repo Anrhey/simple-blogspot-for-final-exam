@@ -27,17 +27,14 @@ const RegistrationPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/register`,
-        {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await fetch(`/api/register`, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
       const data = await res.json();
       if (res.ok) {
