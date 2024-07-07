@@ -29,6 +29,7 @@ const SearchPosts = () => {
     try {
       const res = await fetch("/api/post/fetch-posts", {
         method: "GET",
+        mode: "no-cors",
       });
 
       const data = await res.json();

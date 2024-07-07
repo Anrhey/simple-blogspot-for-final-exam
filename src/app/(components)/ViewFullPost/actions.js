@@ -2,6 +2,7 @@ export async function fetchViewPost(id) {
   try {
     const res = await fetch(`/api/post/${id}`, {
       method: "GET",
+      mode: "no-cors",
     });
 
     const data = await res.json();
@@ -16,6 +17,7 @@ export async function addComment(token, formData, id) {
   try {
     const res = await fetch(`/api/post/${id}/comment`, {
       method: "POST",
+      mode: "no-cors",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -35,6 +37,7 @@ export async function fetchComments(token, id) {
   try {
     const res = await fetch(`/api/post/${id}`, {
       method: "GET",
+      mode: "no-cors",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,

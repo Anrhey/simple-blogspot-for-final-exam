@@ -2,6 +2,7 @@ export async function fetchPostByID(id, token) {
   try {
     const res = await fetch(`/api/post/${id}`, {
       method: "GET",
+      mode: "no-cors",
       headers: {
         "Content-type": "application/json",
       },
@@ -19,6 +20,7 @@ export async function updatePost(formData, token, id) {
   try {
     const res = await fetch(`/api/post/${id}`, {
       method: "PUT",
+      mode: "no-cors",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -38,6 +40,7 @@ export async function deletePost(token, id) {
   try {
     const res = await fetch(`/api/post/${id}`, {
       method: "DELETE",
+      mode: "no-cors",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,

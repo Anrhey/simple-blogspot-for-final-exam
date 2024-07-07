@@ -2,6 +2,7 @@ export async function fetchPost() {
   try {
     const res = await fetch("/api/post/fetch-posts", {
       method: "GET",
+      mode: "no-cors",
       headers: {
         "Content-type": "application/json",
       },
@@ -16,6 +17,7 @@ export async function fetchPost() {
 export const likePost = async (postId, token) => {
   const res = await fetch(`/api/post/${postId}/like`, {
     method: "POST",
+    mode: "no-cors",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
