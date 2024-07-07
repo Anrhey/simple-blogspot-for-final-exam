@@ -24,6 +24,7 @@ const Login = () => {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
+        // `https://simple-blogspot-for-final-exam-k0l59qby8-anrheys-projects.vercel.app/api/login`,
         {
           method: "POST",
           credentials: "include",
@@ -49,6 +50,9 @@ const Login = () => {
     } catch (error) {
       setErrorMessage("Login failed. Please try again later.");
       console.error("Login failed:", error);
+      setErrorMessage("Login failed. Please try again later.");
+      console.error("Login failed:", error);
+      console.error("Error details:", error.message, error.stack);
     }
   };
 

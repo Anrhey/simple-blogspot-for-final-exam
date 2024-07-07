@@ -23,13 +23,13 @@ export async function POST(req) {
   //await cors(req, NextResponse); // Run the middleware
   //await runMiddleware(req, NextResponse, cors);
   // Set CORS headers to allow all origins
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
-  res.setHeader(
+  NextResponse.setHeader("Access-Control-Allow-Credentials", true);
+  NextResponse.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins
+  NextResponse.setHeader(
     "Access-Control-Allow-Methods",
     "GET,OPTIONS,PATCH,DELETE,POST,PUT"
   );
-  res.setHeader(
+  NextResponse.setHeader(
     "Access-Control-Allow-Headers",
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
   );
