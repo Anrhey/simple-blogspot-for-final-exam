@@ -40,6 +40,7 @@ const Homepage = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["posts"],
+    staleTime: 0,
     queryFn: async () => await fetchPost(),
   });
 
@@ -145,7 +146,7 @@ const Homepage = () => {
             {/* Blog Posts */}
             <Box sx={{ mt: 4 }}>
               {data
-                .slice()
+                ?.slice()
                 .reverse()
                 .map((post, index) => (
                   <Card key={index} sx={{ mb: 4 }}>
