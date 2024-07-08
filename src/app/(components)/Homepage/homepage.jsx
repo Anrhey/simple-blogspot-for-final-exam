@@ -64,11 +64,11 @@ const Homepage = () => {
       setCurrentLikePostId(postId);
 
       // Optimistically update the data
-      await queryClient.cancelQueries(["posts"]);
+      await queryClient.cancelQueries("posts");
 
-      const previousData = queryClient.getQueryData(["posts"]);
+      const previousData = queryClient.getQueryData("posts");
 
-      queryClient.setQueryData(["posts"], (old) => {
+      queryClient.setQueryData("posts", (old) => {
         return old.map((post) =>
           post.postId === postId
             ? {
@@ -87,10 +87,10 @@ const Homepage = () => {
     },
     onSettled: () => {
       setCurrentLikePostId(null);
-      queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries("posts");
     },
     onError: (err, postId, context) => {
-      queryClient.setQueryData(["posts"], context.previousData);
+      queryClient.setQueryData("posts", context.previousData);
     },
   });
 
@@ -136,8 +136,8 @@ const Homepage = () => {
   const mutation = useMutation({
     mutationFn: () => createPost(formData, token),
     onSuccess: () => {
-      queryClient.invalidateQueries(["posts"]);
-      queryClient.refetchQueries(["posts"]);
+      queryClient.invalidateQueries("posts");
+      queryClient.refetchQueries("posts");
       //setSuccessMessage(true);
     },
   });
