@@ -272,48 +272,52 @@ const Homepage = () => {
 
             {/* Blog Posts */}
             <Box sx={{ mt: 4 }}>
-              {data
-                ?.slice()
-                .reverse()
-                .map((post, index) => (
-                  <Card key={index} sx={{ mb: 4 }}>
-                    <Link href={`/ViewPost/${post.postId}`} passHref>
-                      <CardHeader
-                        avatar={<Avatar src={post.author.profileImage} />}
-                        title={post.author.name}
-                        subheader={new Date(
-                          post.createdAt
-                        ).toLocaleDateString()}
-                      />
-                      <CardContent>
-                        <Typography variant="h5" component="div">
-                          {post.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {post.content}
-                        </Typography>
-                      </CardContent>
-                    </Link>
-                    {post.imageUrl && (
-                      <CardMedia
-                        component="img"
-                        height="194"
-                        image={post.imageUrl}
-                        alt={post.title}
-                        sx={{
-                          padding: 1,
-                        }}
-                      />
-                    )}
+              {mutation.isPending ? (
+                <CircularProgress />
+              ) : (
+                data
+                  ?.slice()
+                  .reverse()
+                  .map((post, index) => (
+                    <Card key={index} sx={{ mb: 4 }}>
+                      <Link href={`/ViewPost/${post.postId}`} passHref>
+                        <CardHeader
+                          avatar={<Avatar src={post.author.profileImage} />}
+                          title={post.author.name}
+                          subheader={new Date(
+                            post.createdAt
+                          ).toLocaleDateString()}
+                        />
+                        <CardContent>
+                          <Typography variant="h5" component="div">
+                            {post.title}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {post.content}
+                          </Typography>
+                        </CardContent>
+                      </Link>
+                      {post.imageUrl && (
+                        <CardMedia
+                          component="img"
+                          height="194"
+                          image={post.imageUrl}
+                          alt={post.title}
+                          sx={{
+                            padding: 1,
+                          }}
+                        />
+                      )}
 
-                    <CardActions disableSpacing>
-                      {renderLikeButton(post)}
-                      <Button size="small" color="primary">
-                        {post.comments.length} Comments
-                      </Button>
-                    </CardActions>
-                  </Card>
-                ))}
+                      <CardActions disableSpacing>
+                        {renderLikeButton(post)}
+                        <Button size="small" color="primary">
+                          {post.comments.length} Comments
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  ))
+              )}
             </Box>
           </Grid>
         </Grid>
