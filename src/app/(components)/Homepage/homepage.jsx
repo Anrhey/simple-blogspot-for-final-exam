@@ -161,6 +161,11 @@ const Homepage = () => {
     // refetch();
   };
 
+  const truncateContent = (content, maxLength) => {
+    if (content.length <= maxLength) return content;
+    return content.substring(0, maxLength) + "...";
+  };
+
   if (isLoading) return <CircularProgress />;
   if (isError) return <div>Error loading posts</div>;
 
@@ -268,7 +273,7 @@ const Homepage = () => {
                 </form>
               </CardContent>
             </Card>
-            {/* <Snackbar
+            <Snackbar
               open={successMessage}
               autoHideDuration={6000}
               onClose={() => setSuccessMessage(false)}
@@ -280,7 +285,7 @@ const Homepage = () => {
               >
                 Post created successfully!
               </Alert>
-            </Snackbar> */}
+            </Snackbar>
 
             {/* Blog Posts */}
             <Box sx={{ mt: 4 }}>
@@ -302,10 +307,10 @@ const Homepage = () => {
                         />
                         <CardContent>
                           <Typography variant="h5" component="div">
-                            {post.title}
+                            {truncateContent(post.title, 150)}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {post.content}
+                            {truncateContent(post.content, 250)}
                           </Typography>
                         </CardContent>
                       </Link>

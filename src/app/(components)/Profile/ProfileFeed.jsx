@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -28,8 +28,13 @@ const ProfileFeed = () => {
   const [deletingPostId, setDeletingPostId] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setToken(localStorage.getItem("token"));
+    }
+  }, []);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["user"],
