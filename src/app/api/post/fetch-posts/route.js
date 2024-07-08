@@ -46,4 +46,4 @@ const handler = async (req) => {
   return NextResponse.json({ status: 200 });
 };
 
-export const GET = authMiddleware(handler);
+export const GET = handler;
