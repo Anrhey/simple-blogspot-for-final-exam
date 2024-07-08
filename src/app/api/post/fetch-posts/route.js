@@ -4,6 +4,8 @@ import { authMiddleware } from "../../../(utils)/middleware/auth";
 
 const prisma = new PrismaClient();
 
+export const dynamic = "force-dynamic";
+
 const handler = async (req) => {
   try {
     const posts = await prisma.post.findMany({
