@@ -252,30 +252,30 @@ const Homepage = () => {
                 </Card>
               )}
               {newPost && (
-                <Card key={newPost.postId} sx={{ mb: 4 }}>
-                  <Link href={`/ViewPost/${newPost.postId}`} passHref>
+                <Card key={newPost?.postId} sx={{ mb: 4 }}>
+                  <Link href={`/ViewPost/${newPost?.postId}`} passHref>
                     <CardHeader
-                      avatar={<Avatar src={newPost.author.profileImage} />}
-                      title={newPost.author.name}
+                      avatar={<Avatar src={newPost?.author?.profileImage} />}
+                      title={newPost?.author?.name}
                       subheader={new Date(
-                        newPost.createdAt
+                        newPost?.createdAt
                       ).toLocaleDateString()}
                     />
                     <CardContent>
                       <Typography variant="h5" component="div">
-                        {truncateContent(newPost.title, 150)}
+                        {truncateContent(newPost?.title, 150)}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {truncateContent(newPost.content, 250)}
+                        {truncateContent(newPost?.content, 250)}
                       </Typography>
                     </CardContent>
                   </Link>
-                  {newPost.imageUrl && (
+                  {newPost?.imageUrl && (
                     <CardMedia
                       component="img"
                       height="194"
-                      image={newPost.imageUrl}
-                      alt={newPost.title}
+                      image={newPost?.imageUrl}
+                      alt={newPost?.title}
                       sx={{
                         padding: 1,
                       }}
@@ -285,7 +285,7 @@ const Homepage = () => {
                   <CardActions disableSpacing>
                     {renderLikeButton(newPost)}
                     <Button size="small" color="primary">
-                      {newPost.comments.length} Comments
+                      {newPost?.comments?.length} Comments
                     </Button>
                   </CardActions>
                 </Card>
