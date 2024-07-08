@@ -49,7 +49,7 @@ const Homepage = () => {
     imageUrl: "",
   });
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => await fetchPost(),
   });
@@ -145,6 +145,7 @@ const Homepage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     mutation.mutate();
+    refetch();
   };
 
   if (isLoading) return <CircularProgress />;
