@@ -51,7 +51,6 @@ const Homepage = () => {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["posts"],
-    staleTime: 0,
     queryFn: async () => await fetchPost(),
   });
 
@@ -138,6 +137,7 @@ const Homepage = () => {
     mutationFn: () => createPost(formData, token),
     onSuccess: () => {
       queryClient.invalidateQueries(["posts"]);
+      queryClient.refetchQueries(["posts"]);
       //setSuccessMessage(true);
     },
   });
@@ -146,8 +146,6 @@ const Homepage = () => {
     e.preventDefault();
     mutation.mutate();
   };
-
-  //if (mutation.isPending) return <div>Loading...</div>;
 
   if (isLoading) return <CircularProgress />;
   if (isError) return <div>Error loading posts</div>;
