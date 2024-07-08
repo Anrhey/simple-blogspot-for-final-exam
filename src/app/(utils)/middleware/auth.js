@@ -27,3 +27,12 @@ export function authMiddleware(handler) {
     return handler(req, params);
   };
 }
+
+export const config = {
+  matcher: [
+    "/api/authCheck",
+    "/api/post/create",
+    "/api/user/me",
+    "/api/post/fetch-posts",
+  ], // Apply to specific route or routes
+};
