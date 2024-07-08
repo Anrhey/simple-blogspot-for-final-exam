@@ -4,6 +4,7 @@ export async function fetchPostByID(id, token) {
       method: "GET",
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

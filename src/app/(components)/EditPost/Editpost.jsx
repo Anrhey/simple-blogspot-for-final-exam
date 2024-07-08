@@ -47,9 +47,9 @@ function EditPost() {
   useEffect(() => {
     if (data) {
       setFormData({
-        title: data.title || "",
-        content: data.content || "",
-        imageUrl: data.imageUrl || "",
+        title: data?.title || "",
+        content: data?.content || "",
+        imageUrl: data?.imageUrl || "",
       });
     }
   }, [data]);
