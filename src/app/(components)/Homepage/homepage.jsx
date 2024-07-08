@@ -43,6 +43,12 @@ const Homepage = () => {
 
   const queryClient = useQueryClient();
 
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+    imageUrl: "",
+  });
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["posts"],
     staleTime: 0,
