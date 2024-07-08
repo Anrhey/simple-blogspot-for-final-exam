@@ -27,7 +27,7 @@ model User {
 model Post {
   postId   String    @id @default(cuid())
   title    String?   @db.VarChar(255)
-  content  String?   @db.Text
+  content  String?   @db.VarChar(65535)
   authorId String?
   author   User?     @relation(fields: [authorId], references: [id])
   imageUrl String?
