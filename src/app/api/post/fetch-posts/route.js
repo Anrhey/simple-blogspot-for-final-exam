@@ -34,7 +34,11 @@ export async function GET() {
 
     console.log(posts);
 
-    return NextResponse.json(posts);
+    return NextResponse.json(posts, {
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
+    });
   } catch (error) {
     console.log(error);
   }
