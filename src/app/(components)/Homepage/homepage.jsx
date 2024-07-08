@@ -274,7 +274,7 @@ const Homepage = () => {
                 <CircularProgress />
               ) : (
                 data
-                  ?.slice()
+                  .slice()
                   .reverse()
                   .map((post, index) => (
                     <Card key={index} sx={{ mb: 4 }}>
