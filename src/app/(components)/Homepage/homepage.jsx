@@ -75,7 +75,7 @@ const Homepage = () => {
   };
 
   const renderLikeButton = (post) => {
-    const userLike = post?.likes.find(
+    const userLike = post?.likes?.find(
       (like) => like?.userId === parseInt(token)
     );
 
