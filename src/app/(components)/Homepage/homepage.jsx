@@ -273,7 +273,7 @@ const Homepage = () => {
                 </form>
               </CardContent>
             </Card>
-            <Snackbar
+            {/* <Snackbar
               open={successMessage}
               autoHideDuration={6000}
               onClose={() => setSuccessMessage(false)}
@@ -285,7 +285,7 @@ const Homepage = () => {
               >
                 Post created successfully!
               </Alert>
-            </Snackbar>
+            </Snackbar> */}
 
             {/* Blog Posts */}
             <Box sx={{ mt: 4 }}>
