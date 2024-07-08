@@ -6,6 +6,7 @@ import { UploadButton } from "../../../utils/uploadthing";
 import { useParams, useRouter } from "next/navigation";
 import { fetchUser, updateUser } from "./actions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 
 const EditUser = () => {
   const [token, setToken] = useState(null);
@@ -61,6 +62,9 @@ const EditUser = () => {
     mutation.mutate();
   };
 
+  if (isLoading) return <div>Loading Data...</div>;
+  if (isError) return <div>Error loading posts</div>;
+
   return (
     <div className={styles.container}>
       <div className={styles.loginBox}>
@@ -99,12 +103,10 @@ const EditUser = () => {
             <UploadButton
               endpoint="imageUploader"
               onClientUploadComplete={(res) => {
-                // Do something with the response
                 console.log("Files: ", res);
                 setFormData({ profileImage: res[0].url });
               }}
               onUploadError={(error) => {
-                // Do something with the error.
                 alert(`ERROR! ${error.message}`);
               }}
             />
@@ -123,6 +125,7 @@ const EditUser = () => {
           <button type="submit" className={styles.loginButton}>
             Update Details
           </button>
+          <Link href={"/profile-feed"}></Link>
         </form>
       </div>
     </div>

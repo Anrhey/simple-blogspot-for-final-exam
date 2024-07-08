@@ -11,6 +11,7 @@ import {
   IconButton,
   Snackbar,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import styles from "./styles.module.css";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -76,6 +77,9 @@ function EditPost() {
     e.preventDefault();
     mutation.mutate();
   };
+
+  if (isLoading) return <CircularProgress />;
+  if (isError) return <div>Error loading posts</div>;
 
   return (
     <Box

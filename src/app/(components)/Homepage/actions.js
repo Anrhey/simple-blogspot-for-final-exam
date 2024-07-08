@@ -28,19 +28,3 @@ export const likePost = async (postId, token) => {
 
   return await res.json();
 };
-
-// export async function likePost(postId, token) {
-//   try {
-//     const res = await fetch(`/api/like/${postId}`, {
-//       method: "PUT",
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     const data = await res.json();
-//     console.log("liked post: ", data);
-//     return data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }

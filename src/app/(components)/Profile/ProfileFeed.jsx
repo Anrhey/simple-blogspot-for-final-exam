@@ -71,21 +71,6 @@ const ProfileFeed = () => {
 
         {/* Main Content Section */}
         <Grid item xs={12} md={8}>
-          <Paper
-            component="form"
-            sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
-              mb: 4,
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search for post..."
-            />
-          </Paper>
-
           {/* Blog Posts */}
           <Box sx={{ mt: 4 }}>
             {data?.userData?.posts
