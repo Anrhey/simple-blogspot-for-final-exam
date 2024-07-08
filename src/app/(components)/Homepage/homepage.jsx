@@ -147,7 +147,7 @@ const Homepage = () => {
     mutation.mutate();
   };
 
-  if (mutation.isPending) return <div>Loading...</div>;
+  //if (mutation.isPending) return <div>Loading...</div>;
 
   if (isLoading) return <CircularProgress />;
   if (isError) return <div>Error loading posts</div>;
