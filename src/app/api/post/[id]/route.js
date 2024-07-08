@@ -5,6 +5,7 @@ import { authMiddleware } from "../../../(utils)/middleware/auth";
 const prisma = new PrismaClient();
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 async function getHandler(req, { params }) {
   const id = params.id;
