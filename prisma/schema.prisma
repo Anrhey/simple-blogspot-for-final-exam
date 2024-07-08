@@ -29,7 +29,7 @@ model Post {
   title    String?   @db.VarChar(255)
   content  String?   @db.VarChar(65535)
   authorId String?
-  author   User?     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author   User?     @relation(fields: [authorId], references: [id])
   imageUrl String?
   comments Comment[]
   likes    Like[]
