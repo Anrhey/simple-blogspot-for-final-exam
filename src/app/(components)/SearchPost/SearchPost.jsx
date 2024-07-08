@@ -29,8 +29,6 @@ const SearchPosts = () => {
     try {
       const res = await fetch("/api/post/fetch-posts", {
         method: "GET",
-        cache: "no-store",
-        next: { revalidate: 3600 },
       });
 
       const data = await res.json();

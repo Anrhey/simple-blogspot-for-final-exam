@@ -36,11 +36,7 @@ const handler = async (req) => {
 
     console.log(posts);
 
-    return NextResponse.json(posts, {
-      headers: {
-        "Cache-Control": "no-store, max-age=0",
-      },
-    });
+    return NextResponse.json(posts);
   } catch (error) {
     console.log(error);
   }
