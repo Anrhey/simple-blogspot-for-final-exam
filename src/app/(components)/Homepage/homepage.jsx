@@ -66,9 +66,10 @@ const Homepage = () => {
       // Optimistically update the data
       await queryClient.cancelQueries("posts");
 
-      const previousData = queryClient.getQueryData("posts");
+      const previousData = queryClient.getQueryData("posts") || [];
 
       queryClient.setQueryData("posts", (old) => {
+        if (!old) return previousData;
         return old.map((post) =>
           post.postId === postId
             ? {
@@ -90,9 +91,49 @@ const Homepage = () => {
       queryClient.invalidateQueries("posts");
     },
     onError: (err, postId, context) => {
-      queryClient.setQueryData("posts", context.previousData);
+      if (context?.previousData) {
+        queryClient.setQueryData("posts", context.previousData);
+      }
     },
   });
+
+  // const likeMutation = useMutation({
+  //   mutationFn: async (postId) => {
+  //     await likePost(postId, token);
+  //   },
+  //   onMutate: async (postId) => {
+  //     setCurrentLikePostId(postId);
+
+  //     // Optimistically update the data
+  //     await queryClient.cancelQueries("posts");
+
+  //     const previousData = queryClient.getQueryData("posts");
+
+  //     queryClient.setQueryData("posts", (old) => {
+  //       return old.map((post) =>
+  //         post.postId === postId
+  //           ? {
+  //               ...post,
+  //               likes: post.likes.map((like) =>
+  //                 like.userId === parseInt(token)
+  //                   ? { ...like, isLiked: !like.isLiked }
+  //                   : like
+  //               ),
+  //             }
+  //           : post
+  //       );
+  //     });
+
+  //     return { previousData };
+  //   },
+  //   onSettled: () => {
+  //     setCurrentLikePostId(null);
+  //     queryClient.invalidateQueries("posts");
+  //   },
+  //   onError: (err, postId, context) => {
+  //     queryClient.setQueryData("posts", context.previousData);
+  //   },
+  // });
 
   const handleLikeToggle = async (postId) => {
     await likeMutation.mutateAsync(postId);
