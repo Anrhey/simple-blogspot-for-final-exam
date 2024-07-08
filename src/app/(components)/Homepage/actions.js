@@ -2,8 +2,6 @@ export async function fetchPost() {
   try {
     const res = await fetch("/api/post/fetch-posts", {
       method: "GET",
-      //next: { revalidate: 3600 },
-      cache: "no-store",
       headers: {
         "Content-type": "application/json",
       },
