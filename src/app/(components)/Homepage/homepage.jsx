@@ -60,40 +60,12 @@ const Homepage = () => {
     mutationFn: async (postId) => {
       await likePost(postId, token);
     },
-    onMutate: async (postId) => {
+    onMutate: (postId) => {
       setCurrentLikePostId(postId);
-
-      // Optimistically update the data
-      await queryClient.cancelQueries("posts");
-
-      const previousData = queryClient.getQueryData("posts") || [];
-
-      queryClient.setQueryData("posts", (old) => {
-        if (!old) return previousData;
-        return old.map((post) =>
-          post.postId === postId
-            ? {
-                ...post,
-                likes: post.likes.map((like) =>
-                  like.userId === parseInt(token)
-                    ? { ...like, isLiked: !like.isLiked }
-                    : like
-                ),
-              }
-            : post
-        );
-      });
-
-      return { previousData };
     },
     onSettled: () => {
       setCurrentLikePostId(null);
-      queryClient.invalidateQueries("posts");
-    },
-    onError: (err, postId, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData("posts", context.previousData);
-      }
+      queryClient.invalidateQueries(["posts"]);
     },
   });
 
@@ -105,11 +77,11 @@ const Homepage = () => {
   //     setCurrentLikePostId(postId);
 
   //     // Optimistically update the data
-  //     await queryClient.cancelQueries("posts");
+  //     await queryClient.cancelQueries(["posts"]);
 
-  //     const previousData = queryClient.getQueryData("posts");
+  //     const previousData = queryClient.getQueryData(["posts"]);
 
-  //     queryClient.setQueryData("posts", (old) => {
+  //     queryClient.setQueryData(["posts"], (old) => {
   //       return old.map((post) =>
   //         post.postId === postId
   //           ? {
@@ -128,10 +100,10 @@ const Homepage = () => {
   //   },
   //   onSettled: () => {
   //     setCurrentLikePostId(null);
-  //     queryClient.invalidateQueries("posts");
+  //     queryClient.invalidateQueries(["posts"]);
   //   },
   //   onError: (err, postId, context) => {
-  //     queryClient.setQueryData("posts", context.previousData);
+  //     queryClient.setQueryData(["posts"], context.previousData);
   //   },
   // });
 
