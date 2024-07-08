@@ -5,7 +5,7 @@ import { authMiddleware } from "../../../(utils)/middleware/auth";
 const prisma = new PrismaClient();
 
 async function putHandler(req, { params }) {
-  const { id } = params;
+  const id = params.id;
   const { name, profileImage } = await req.json();
 
   try {

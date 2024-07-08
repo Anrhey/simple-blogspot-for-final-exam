@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export const dynamic = "force-dynamic";
 
 async function getHandler(req, { params }) {
-  const { id } = params;
+  const id = params.id;
 
   try {
     const fetchPost = await prisma.post.findUnique({
