@@ -112,27 +112,29 @@ const Homepage = () => {
   };
 
   const renderLikeButton = (post) => {
-    const userLike = post.likes.find((like) => like.userId === parseInt(token));
+    const userLike = post?.likes.find(
+      (like) => like.userId === parseInt(token)
+    );
 
     return (
       <IconButton
-        onClick={() => handleLikeToggle(post.postId)}
-        aria-label={userLike && userLike.isLiked ? "unlike" : "like"}
+        onClick={() => handleLikeToggle(post?.postId)}
+        aria-label={userLike && userLike?.isLiked ? "unlike" : "like"}
         color="primary"
         size="medium"
       >
         <Tooltip
-          title={userLike && userLike.isLiked ? "Unlike" : "Like"}
+          title={userLike && userLike?.isLiked ? "Unlike" : "Like"}
           placement="top"
         >
-          {currentLikePostId === post.postId ? (
+          {currentLikePostId === post?.postId ? (
             <CircularProgress size={24} />
-          ) : userLike && userLike.isLiked ? (
+          ) : userLike && userLike?.isLiked ? (
             <ThumbDown />
           ) : (
             <ThumbUp />
           )}
-          {post.likes.filter((like) => like.isLiked).length}
+          {post?.likes.filter((like) => like?.isLiked).length}
         </Tooltip>
       </IconButton>
     );
