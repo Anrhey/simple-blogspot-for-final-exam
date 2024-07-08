@@ -45,7 +45,9 @@ function ProfileCard() {
   if (isLoading) return <CircularProgress />;
   if (isError) return <Typography>Error loading user data</Typography>;
 
-  return (
+  return !token && isLoading ? (
+    <CircularProgress />
+  ) : (
     <Box
       sx={{
         display: "flex",
