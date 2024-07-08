@@ -78,6 +78,8 @@ function CreateBlogPost() {
     mutation.mutate();
   };
 
+  if (mutation.isPending) return <div>Loading...</div>;
+
   return (
     <>
       <Card sx={{ mb: 4, backgroundColor: "#2d3748", color: "white" }}>
