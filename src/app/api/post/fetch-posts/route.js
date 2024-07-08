@@ -4,7 +4,7 @@ import { authMiddleware } from "../../../(utils)/middleware/auth";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+const handler = async (req) => {
   try {
     const posts = await prisma.post.findMany({
       include: {
@@ -44,4 +44,6 @@ export async function GET() {
   }
 
   return NextResponse.json({ status: 200 });
-}
+};
+
+export const GET = authMiddleware(handler);
