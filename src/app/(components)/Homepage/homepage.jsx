@@ -191,8 +191,8 @@ const Homepage = () => {
                     InputLabelProps={{
                       style: { color: "white" },
                     }}
-                    onFocus={handleTitleFocus}
-                    onBlur={handleTitleBlur}
+                    // onFocus={handleTitleFocus}
+                    // onBlur={handleTitleBlur}
                   />
                   <TextField
                     fullWidth
@@ -209,8 +209,8 @@ const Homepage = () => {
                     InputLabelProps={{
                       style: { color: "white" },
                     }}
-                    onFocus={handleTextareaFocus}
-                    onBlur={handleTextareaBlur}
+                    // onFocus={handleTextareaFocus}
+                    // onBlur={handleTextareaBlur}
                   />
                   <Box mt={2} display="flex" justifyContent="space-between">
                     <IconButton color="primary" component="label">
@@ -250,7 +250,7 @@ const Homepage = () => {
                 </form>
               </CardContent>
             </Card>
-            <Snackbar
+            {/* <Snackbar
               open={successMessage}
               autoHideDuration={6000}
               onClose={() => setSuccessMessage(false)}
@@ -262,7 +262,7 @@ const Homepage = () => {
               >
                 Post created successfully!
               </Alert>
-            </Snackbar>
+            </Snackbar> */}
 
             {/* Blog Posts */}
             <Box sx={{ mt: 4 }}>
