@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { authMiddleware } from "../../../(utils)/middleware/auth";
 
 const prisma = new PrismaClient();
+export const dynamic = "force-dynamic";
 
 async function putHandler(req, { params }) {
   const id = params.id;

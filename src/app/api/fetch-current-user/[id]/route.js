@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
+export const dynamic = "force-dynamic";
+
 const handler = async (req, { params }) => {
   const id = params.id;
   //const userID = req.user.id;

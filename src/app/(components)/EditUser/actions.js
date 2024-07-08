@@ -3,7 +3,7 @@ export async function fetchUser(id, token) {
     const res = await fetch(`/api/fetch-current-user/${id}`, {
       method: "GET",
       headers: {
-        // "Content-type": "application/json",
+        "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });

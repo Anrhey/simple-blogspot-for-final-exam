@@ -5,6 +5,8 @@ import cors from "../../(utils)/cors/cors";
 
 const prisma = new PrismaClient();
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req) {
   const { email, name, password, profileImage } = await req.json();
 

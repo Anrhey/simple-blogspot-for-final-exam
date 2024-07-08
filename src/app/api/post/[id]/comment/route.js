@@ -4,6 +4,8 @@ import { authMiddleware } from "../../../../(utils)/middleware/auth";
 
 const prisma = new PrismaClient();
 
+export const dynamic = "force-dynamic";
+
 const postHandler = async (req) => {
   const { comment_content, postId } = await req.json();
   const userID = req.user.id;
