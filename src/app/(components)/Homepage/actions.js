@@ -1,4 +1,4 @@
-export async function fetchPost() {
+export async function fetchPost(token) {
   try {
     const res = await fetch("/api/post/fetch-posts", {
       method: "GET",
@@ -6,6 +6,7 @@ export async function fetchPost() {
       next: { revalidate: 3600 },
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const data = await res.json();

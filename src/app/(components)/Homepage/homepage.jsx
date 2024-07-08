@@ -51,7 +51,7 @@ const Homepage = () => {
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["posts"],
-    queryFn: async () => await fetchPost(),
+    queryFn: async () => await fetchPost(token),
   });
 
   const [currentLikePostId, setCurrentLikePostId] = useState(null);
