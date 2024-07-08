@@ -113,7 +113,7 @@ const Homepage = () => {
 
   const renderLikeButton = (post) => {
     const userLike = post?.likes.find(
-      (like) => like.userId === parseInt(token)
+      (like) => like?.userId === parseInt(token)
     );
 
     return (
@@ -134,7 +134,7 @@ const Homepage = () => {
           ) : (
             <ThumbUp />
           )}
-          {post?.likes.filter((like) => like?.isLiked).length}
+          {post?.likes?.filter((like) => like?.isLiked).length}
         </Tooltip>
       </IconButton>
     );
@@ -299,29 +299,29 @@ const Homepage = () => {
                   .reverse()
                   .map((post, index) => (
                     <Card key={index} sx={{ mb: 4 }}>
-                      <Link href={`/ViewPost/${post.postId}`} passHref>
+                      <Link href={`/ViewPost/${post?.postId}`} passHref>
                         <CardHeader
-                          avatar={<Avatar src={post.author.profileImage} />}
-                          title={post.author.name}
+                          avatar={<Avatar src={post?.author?.profileImage} />}
+                          title={post?.author?.name}
                           subheader={new Date(
-                            post.createdAt
+                            post?.createdAt
                           ).toLocaleDateString()}
                         />
                         <CardContent>
                           <Typography variant="h5" component="div">
-                            {truncateContent(post.title, 150)}
+                            {truncateContent(post?.title, 150)}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {truncateContent(post.content, 250)}
+                            {truncateContent(post?.content, 250)}
                           </Typography>
                         </CardContent>
                       </Link>
-                      {post.imageUrl && (
+                      {post?.imageUrl && (
                         <CardMedia
                           component="img"
                           height="194"
-                          image={post.imageUrl}
-                          alt={post.title}
+                          image={post?.imageUrl}
+                          alt={post?.title}
                           sx={{
                             padding: 1,
                           }}
@@ -331,7 +331,7 @@ const Homepage = () => {
                       <CardActions disableSpacing>
                         {renderLikeButton(post)}
                         <Button size="small" color="primary">
-                          {post.comments.length} Comments
+                          {post?.comments?.length} Comments
                         </Button>
                       </CardActions>
                     </Card>
