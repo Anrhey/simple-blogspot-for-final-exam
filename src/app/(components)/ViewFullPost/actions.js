@@ -2,6 +2,7 @@ export async function fetchViewPost(id) {
   try {
     const res = await fetch(`/api/post/${id}`, {
       method: "GET",
+      cache: "no-store",
     });
 
     const data = await res.json();
