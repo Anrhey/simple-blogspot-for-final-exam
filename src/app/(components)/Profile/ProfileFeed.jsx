@@ -89,7 +89,7 @@ const ProfileFeed = () => {
           {/* Blog Posts */}
           <Box sx={{ mt: 4 }}>
             {data?.userData?.posts
-              .slice()
+              ?.slice()
               .reverse()
               .map((post, index) => (
                 <Paper key={index} sx={{ p: 2, mb: 2, position: "relative" }}>

@@ -75,7 +75,7 @@ const SearchPosts = () => {
                 item.title.toLowerCase().includes(value.toLowerCase()) ||
                 item.content.toLowerCase().includes(value.toLowerCase())
             )
-            .slice(0, 5)
+            ?.slice(0, 5)
             .map((item) => (
               <Card key={item.postId} sx={{ mb: 2 }}>
                 <Link href={`/ViewPost/${item.postId}`} passHref>
