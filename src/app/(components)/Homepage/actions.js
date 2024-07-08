@@ -1,6 +1,7 @@
 export async function fetchPost() {
+  const { signal } = new AbortController();
   try {
-    const res = await fetch("/api/post/fetch-posts", {
+    const res = await fetch("/api/post/fetch-posts", signal, {
       method: "GET",
       headers: {
         "Content-type": "application/json",

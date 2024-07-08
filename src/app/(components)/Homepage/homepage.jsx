@@ -145,7 +145,7 @@ const Homepage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     mutation.mutate();
-    refetch();
+    // refetch();
   };
 
   if (isLoading) return <CircularProgress />;
