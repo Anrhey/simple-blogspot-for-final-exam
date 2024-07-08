@@ -71,35 +71,37 @@ const ViewFullPost = () => {
       </Link>
       <Card sx={{ mb: 2 }}>
         <CardHeader
-          avatar={<Avatar src={data.author.profileImage} />}
-          title={data.author.name}
-          subheader={new Date(data.createdAt).toLocaleDateString()}
+          avatar={<Avatar src={data?.author?.profileImage} />}
+          title={data?.author?.name}
+          subheader={new Date(data?.createdAt).toLocaleDateString()}
         />
         <CardContent>
           <Typography variant="h5">
-            {data.title.length ? data.title : "No Title provided for this post"}
+            {data?.title?.length
+              ? data?.title
+              : "No Title provided for this post"}
           </Typography>
           <Typography variant="body1">
-            {data.content.length ? data.content : "No Content for this post"}
+            {data?.content?.length ? data?.content : "No Content for this post"}
           </Typography>
-          {data.imageUrl && (
+          {data?.imageUrl && (
             <CardMedia
               component="img"
               height="194"
-              image={data.imageUrl}
+              image={data?.imageUrl}
               alt="Post Image"
               sx={{ mt: 2, borderRadius: 1 }}
             />
           )}
           <Typography variant="body1" sx={{ mt: 2 }}>
-            {data.likes.length} {"Like(s)"}
+            {data?.likes?.length} {"Like(s)"}
           </Typography>
         </CardContent>
       </Card>
       <Card sx={{ mb: 2 }}>
         <CardContent>
           <Typography variant="h6">
-            Comments - {data.comments.length}
+            Comments - {data?.comments?.length}
           </Typography>
           <form onSubmit={handleCommentSubmit}>
             <TextField
@@ -116,18 +118,18 @@ const ViewFullPost = () => {
             </Button>
           </form>
           <Divider sx={{ my: 2 }} />
-          {data.comments.map((comment, index) => (
+          {data?.comments?.map((comment, index) => (
             <Box
               key={index}
               sx={{ display: "flex", alignItems: "center", mt: 2, mb: 2 }}
             >
-              <Avatar src={comment.author.profileImage} sx={{ mr: 2 }} />
+              <Avatar src={comment?.author?.profileImage} sx={{ mr: 2 }} />
               <Box>
                 <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                  {comment.author.name}
+                  {comment?.author?.name}
                 </Typography>
                 <Typography variant="body2">
-                  {comment.comment_content}
+                  {comment?.comment_content}
                 </Typography>
               </Box>
             </Box>
