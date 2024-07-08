@@ -18,13 +18,18 @@ import {
   CardMedia,
   CardActions,
   Button,
+  Snackbar,
+  Alert,
+  TextField,
 } from "@mui/material";
 import { ThumbUp, ThumbDown } from "@mui/icons-material";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import ProfileCard from "../Profile/ProfileCard";
 import CreatePost from "../CreatePost/createpost";
+import { UploadButton } from "../../../utils/uploadthing";
 import SearchPosts from "../SearchPost/SearchPost";
 import { likePost, fetchPost } from "./actions";
+import { createPost } from "../CreatePost/actions";
 import Link from "next/link";
 
 const Homepage = () => {
@@ -115,6 +120,29 @@ const Homepage = () => {
     );
   };
 
+  //create post
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const mutation = useMutation({
+    mutationFn: () => createPost(formData, token),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["posts"]);
+      //setSuccessMessage(true);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutation.mutate();
+  };
+
+  if (mutation.isPending) return <div>Loading...</div>;
+
   if (isLoading) return <CircularProgress />;
   if (isError) return <div>Error loading posts</div>;
 
@@ -141,7 +169,100 @@ const Homepage = () => {
               <SearchPosts />
             </Paper>
 
-            <CreatePost />
+            {/* <CreatePost /> */}
+
+            <Card sx={{ mb: 4, backgroundColor: "#2d3748", color: "white" }}>
+              <CardHeader
+                title="Create a Blog Post"
+                titleTypographyProps={{ variant: "h6", color: "white" }}
+              />
+              <CardContent>
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    fullWidth
+                    label="Blog Title"
+                    variant="outlined"
+                    margin="normal"
+                    name="title"
+                    onChange={handleChange}
+                    InputProps={{
+                      style: { backgroundColor: "#4a5568", color: "white" },
+                    }}
+                    InputLabelProps={{
+                      style: { color: "white" },
+                    }}
+                    onFocus={handleTitleFocus}
+                    onBlur={handleTitleBlur}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Write your post here..."
+                    variant="outlined"
+                    margin="normal"
+                    name="content"
+                    onChange={handleChange}
+                    multiline
+                    rows={4}
+                    InputProps={{
+                      style: { backgroundColor: "#4a5568", color: "white" },
+                    }}
+                    InputLabelProps={{
+                      style: { color: "white" },
+                    }}
+                    onFocus={handleTextareaFocus}
+                    onBlur={handleTextareaBlur}
+                  />
+                  <Box mt={2} display="flex" justifyContent="space-between">
+                    <IconButton color="primary" component="label">
+                      <UploadButton
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                          // Do something with the response
+                          console.log("Files: ", res);
+                          setFormData({ ...formData, imageUrl: res[0].url });
+                        }}
+                        onUploadError={(error) => {
+                          // Do something with the error.
+                          alert(`ERROR! ${error.message}`);
+                        }}
+                      />
+                      {formData.imageUrl.length ? (
+                        <img
+                          src={formData.imageUrl}
+                          alt="Uploaded"
+                          style={{
+                            maxHeight: "200px",
+                            borderRadius: "8px",
+                            marginTop: "10px",
+                          }}
+                        />
+                      ) : null}
+                    </IconButton>
+                    <Button
+                      disabled={mutation.isPending}
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                    >
+                      Post
+                    </Button>
+                  </Box>
+                </form>
+              </CardContent>
+            </Card>
+            <Snackbar
+              open={successMessage}
+              autoHideDuration={6000}
+              onClose={() => setSuccessMessage(false)}
+            >
+              <Alert
+                onClose={() => setSuccessMessage(false)}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                Post created successfully!
+              </Alert>
+            </Snackbar>
 
             {/* Blog Posts */}
             <Box sx={{ mt: 4 }}>

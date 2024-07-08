@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "./actions";
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadButton } from "../../../utils/uploadthing";
 import {
   TextField,
   Button,
