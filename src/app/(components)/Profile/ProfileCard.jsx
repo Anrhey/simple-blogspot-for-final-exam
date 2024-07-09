@@ -19,16 +19,11 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "./actions";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 function ProfileCard() {
   const router = useRouter();
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token"));
-    }
-  }, []);
+  const token = Cookies.get("token");
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["user"],
@@ -37,8 +32,8 @@ function ProfileCard() {
   });
 
   const handleLogout = () => {
+    Cookies.remove("token");
     router.push("/login");
-    localStorage.removeItem("token");
   };
 
   if (!token) return <Typography>Unauthorized</Typography>;

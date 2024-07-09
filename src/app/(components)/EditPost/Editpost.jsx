@@ -17,6 +17,7 @@ import styles from "./styles.module.css";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import { updatePost, fetchPostByID } from "./actions";
 
 function EditPost() {
@@ -30,7 +31,7 @@ function EditPost() {
   const { id } = useParams();
   const router = useRouter();
 
-  const [token, setToken] = useState(null);
+  const token = Cookies.get("token");
   const [successMessage, setSuccessMessage] = useState(false);
 
   console.log("token from edit post", token);
@@ -73,29 +74,12 @@ function EditPost() {
     mutation.mutate();
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []); // Run this effect only once on mount
-
-  useEffect(() => {
-    if (token === null) return; // Wait for the token to be set
-
-    if (!token) {
-      router.push("/login");
-    }
-  }, [router, token]); // Run this effect whenever the router or token changes
-
-  if (token === null && isLoading) {
-    router.push("/login"); // Show a loading spinner while checking the token
-  }
-
   return (
     <>
       {!token ? (
-        <div>No token received Please login</div>
+        <div>
+          <CircularProgress />
+        </div>
       ) : (
         <Box
           sx={{

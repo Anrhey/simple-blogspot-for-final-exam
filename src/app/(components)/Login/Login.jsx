@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 import styles from "./styles.module.css";
 
 const Login = () => {
@@ -35,7 +36,8 @@ const Login = () => {
       const { token } = data;
 
       if (token) {
-        localStorage.setItem("token", token);
+        // localStorage.setItem("token", token);
+        Cookies.set("token", token, { expires: 1 });
         setSuccessMessage("Login successful! Redirecting to homepage...");
         setTimeout(() => {
           router.push("/homepage");

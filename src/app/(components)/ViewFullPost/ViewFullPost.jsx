@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import { fetchViewPost, addComment } from "./actions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -26,7 +27,7 @@ const ViewFullPost = () => {
     comment_content: "",
     postId: id,
   });
-  const [token, setToken] = useState(null);
+  const token = Cookies.get("token");
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -56,29 +57,12 @@ const ViewFullPost = () => {
     mutation.mutate();
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []); // Run this effect only once on mount
-
-  useEffect(() => {
-    if (token === null) return; // Wait for the token to be set
-
-    if (!token) {
-      router.push("/login");
-    }
-  }, [router, token]); // Run this effect whenever the router or token changes
-
-  if (token === null && isLoading) {
-    router.push("/login"); // Show a loading spinner while checking the token
-  }
-
   return (
     <>
       {!token ? (
-        <div>No token received Please login</div>
+        <div>
+          <CircularProgress />
+        </div>
       ) : (
         <Box sx={{ mt: 4, margin: 2 }}>
           <Link href={"/homepage"} passHref>

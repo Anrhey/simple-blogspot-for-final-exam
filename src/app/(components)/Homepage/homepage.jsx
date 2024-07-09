@@ -28,10 +28,12 @@ import { likePost, fetchPost } from "./actions";
 import { createPost } from "../CreatePost/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const Homepage = () => {
-  const [token, setToken] = useState(null);
   const router = useRouter();
+
+  const token = Cookies.get("token");
 
   const queryClient = useQueryClient();
 
@@ -128,36 +130,12 @@ const Homepage = () => {
     return content.substring(0, maxLength) + "...";
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []); // Run this effect only once on mount
-
-  useEffect(() => {
-    if (token === null) return; // Wait for the token to be set
-
-    if (!token) {
-      router.push("/login");
-    }
-  }, [router, token]); // Run this effect whenever the router or token changes
-
-  if (token === null && isLoading) {
-    router.push("/login"); // Show a loading spinner while checking the token
-  }
-
-  // if (isLoading) {
-  //   return <CircularProgress />;
-  // }
-  // if (isError) {
-  //   return <div>Error loading posts</div>;
-  // }
-
   return (
     <>
       {!token ? (
-        <div>No token received Please login</div>
+        <div>
+          <CircularProgress />
+        </div>
       ) : (
         <Container sx={{ mt: 4 }}>
           <Grid container spacing={4}>

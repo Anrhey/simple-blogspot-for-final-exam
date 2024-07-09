@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPost } from "./actions";
 import { UploadButton } from "../../../utils/uploadthing";
+import Cookies from "js-cookie";
 import {
   TextField,
   Button,
@@ -29,14 +30,9 @@ function CreateBlogPost() {
   });
   const [isTitleFocused, setIsTitleFocused] = useState(false);
   const [isTextareaFocused, setIsTextareaFocused] = useState(false);
-  const [token, setToken] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token"));
-    }
-  }, []);
+  const token = Cookies.get("token");
 
   const handleTitleFocus = () => {
     setIsTitleFocused(true);

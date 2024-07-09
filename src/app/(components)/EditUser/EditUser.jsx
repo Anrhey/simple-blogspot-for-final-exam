@@ -5,11 +5,13 @@ import styles from "./styles.module.css";
 import { UploadButton } from "../../../utils/uploadthing";
 import { useParams, useRouter } from "next/navigation";
 import { fetchUser, updateUser } from "./actions";
+import { CircularProgress } from "@mui/material";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 const EditUser = () => {
-  const [token, setToken] = useState(null);
+  const token = Cookies.get("token");
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -56,29 +58,12 @@ const EditUser = () => {
     mutation.mutate();
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("token");
-      setToken(storedToken);
-    }
-  }, []); // Run this effect only once on mount
-
-  useEffect(() => {
-    if (token === null) return; // Wait for the token to be set
-
-    if (!token) {
-      router.push("/login");
-    }
-  }, [router, token]); // Run this effect whenever the router or token changes
-
-  if (token === null && isLoading) {
-    router.push("/login"); // Show a loading spinner while checking the token
-  }
-
   return (
     <>
       {!token ? (
-        <div>No token received Please login</div>
+        <div>
+          <CircularProgress />
+        </div>
       ) : (
         <div className={styles.container}>
           <div className={styles.loginBox}>
