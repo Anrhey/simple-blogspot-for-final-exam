@@ -33,11 +33,6 @@ function EditPost() {
   const [token, setToken] = useState(null);
   const [successMessage, setSuccessMessage] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token"));
-    }
-  }, []);
   console.log("token from edit post", token);
 
   const { data, isLoading, isError } = useQuery({
@@ -78,104 +73,126 @@ function EditPost() {
     mutation.mutate();
   };
 
-  if (isLoading) return <CircularProgress />;
-  if (isError) return <div>Error loading posts</div>;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []); // Run this effect only once on mount
+
+  useEffect(() => {
+    if (token === null) return; // Wait for the token to be set
+
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router, token]); // Run this effect whenever the router or token changes
+
+  if (token === null && isLoading) {
+    router.push("/login"); // Show a loading spinner while checking the token
+  }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "#2d3748",
-        p: 3,
-        borderRadius: 2,
-        marginBottom: 2,
-      }}
-    >
-      <form onSubmit={handleSubmit}>
-        <Typography variant="h6" color="white" gutterBottom>
-          <Link href={"/profile-feed"}>Go back</Link>
-        </Typography>
-        <TextField
-          fullWidth
-          label={"Blog title"}
-          variant="outlined"
-          margin="normal"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          InputProps={{
-            style: { backgroundColor: "#4a5568", color: "white" },
+    <>
+      {!token ? (
+        <div>No token received Please login</div>
+      ) : (
+        <Box
+          sx={{
+            backgroundColor: "#2d3748",
+            p: 3,
+            borderRadius: 2,
+            marginBottom: 2,
           }}
-          InputLabelProps={{
-            style: { color: "white" },
-          }}
-        />
-
-        <TextField
-          fullWidth
-          label="Write your post here..."
-          variant="outlined"
-          margin="normal"
-          name="content"
-          value={formData.content}
-          onChange={handleChange}
-          multiline
-          rows={4}
-          InputProps={{
-            style: { backgroundColor: "#4a5568", color: "white" },
-          }}
-          InputLabelProps={{
-            style: { color: "white" },
-          }}
-        />
-
-        <Box mt={2} display="flex" justifyContent="space-between">
-          <IconButton color="primary" component="label">
-            <UploadFileIcon />
-            <UploadButton
-              endpoint="imageUploader"
-              onClientUploadComplete={(res) => {
-                console.log("Files: ", res);
-                setFormData({ imageUrl: res[0].url });
+        >
+          <form onSubmit={handleSubmit}>
+            <Typography variant="h6" color="white" gutterBottom>
+              <Link href={"/profile-feed"}>Go back</Link>
+            </Typography>
+            <TextField
+              fullWidth
+              label={"Blog title"}
+              variant="outlined"
+              margin="normal"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              InputProps={{
+                style: { backgroundColor: "#4a5568", color: "white" },
               }}
-              onUploadError={(error) => {
-                alert(`ERROR! ${error.message}`);
+              InputLabelProps={{
+                style: { color: "white" },
               }}
             />
-            {formData.imageUrl.length ? (
-              <div>
-                <img
-                  src={formData.imageUrl}
-                  alt="my image"
-                  className={styles.image}
-                  value={formData.imageUrl}
+
+            <TextField
+              fullWidth
+              label="Write your post here..."
+              variant="outlined"
+              margin="normal"
+              name="content"
+              value={formData.content}
+              onChange={handleChange}
+              multiline
+              rows={4}
+              InputProps={{
+                style: { backgroundColor: "#4a5568", color: "white" },
+              }}
+              InputLabelProps={{
+                style: { color: "white" },
+              }}
+            />
+
+            <Box mt={2} display="flex" justifyContent="space-between">
+              <IconButton color="primary" component="label">
+                <UploadFileIcon />
+                <UploadButton
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res) => {
+                    console.log("Files: ", res);
+                    setFormData({ imageUrl: res[0].url });
+                  }}
+                  onUploadError={(error) => {
+                    alert(`ERROR! ${error.message}`);
+                  }}
                 />
-              </div>
-            ) : null}
-          </IconButton>
-          <Button
-            disabled={mutation.isPending}
-            type="submit"
-            variant="contained"
-            color="primary"
+                {formData.imageUrl.length ? (
+                  <div>
+                    <img
+                      src={formData.imageUrl}
+                      alt="my image"
+                      className={styles.image}
+                      value={formData.imageUrl}
+                    />
+                  </div>
+                ) : null}
+              </IconButton>
+              <Button
+                disabled={mutation.isPending}
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Post
+              </Button>
+            </Box>
+          </form>
+          <Snackbar
+            open={successMessage}
+            autoHideDuration={6000}
+            onClose={() => setSuccessMessage(false)}
           >
-            Post
-          </Button>
+            <Alert
+              onClose={() => setSuccessMessage(false)}
+              severity="success"
+              sx={{ width: "100%" }}
+            >
+              Post updated successfully!
+            </Alert>
+          </Snackbar>
         </Box>
-      </form>
-      <Snackbar
-        open={successMessage}
-        autoHideDuration={6000}
-        onClose={() => setSuccessMessage(false)}
-      >
-        <Alert
-          onClose={() => setSuccessMessage(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Post updated successfully!
-        </Alert>
-      </Snackbar>
-    </Box>
+      )}
+    </>
   );
 }
 

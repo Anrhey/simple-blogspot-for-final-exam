@@ -27,15 +27,11 @@ import SearchPosts from "../SearchPost/SearchPost";
 import { likePost, fetchPost } from "./actions";
 import { createPost } from "../CreatePost/actions";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Homepage = () => {
   const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token"));
-    }
-  }, []);
+  const router = useRouter();
 
   const queryClient = useQueryClient();
 
@@ -132,200 +128,184 @@ const Homepage = () => {
     return content.substring(0, maxLength) + "...";
   };
 
-  if (isLoading) return <CircularProgress />;
-  if (isError) return <div>Error loading posts</div>;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []); // Run this effect only once on mount
+
+  useEffect(() => {
+    if (token === null) return; // Wait for the token to be set
+
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router, token]); // Run this effect whenever the router or token changes
+
+  if (token === null && isLoading) {
+    router.push("/login"); // Show a loading spinner while checking the token
+  }
+
+  // if (isLoading) {
+  //   return <CircularProgress />;
+  // }
+  // if (isError) {
+  //   return <div>Error loading posts</div>;
+  // }
 
   return (
     <>
-      <Container sx={{ mt: 4 }}>
-        <Grid container spacing={4}>
-          {/* Profile Section */}
-          <Grid item xs={12} md={4}>
-            <ProfileCard />
-          </Grid>
+      {!token ? (
+        <div>No token received Please login</div>
+      ) : (
+        <Container sx={{ mt: 4 }}>
+          <Grid container spacing={4}>
+            {/* Profile Section */}
+            <Grid item xs={12} md={4}>
+              <ProfileCard />
+            </Grid>
 
-          {/* Main Content Section */}
-          <Grid item xs={12} md={8}>
-            <Paper
-              component="form"
-              sx={{
-                p: "2px 4px",
-                display: "flex",
-                alignItems: "center",
-                mb: 4,
-              }}
-            >
-              <SearchPosts />
-            </Paper>
+            {/* Main Content Section */}
+            <Grid item xs={12} md={8}>
+              <Paper
+                component="form"
+                sx={{
+                  p: "2px 4px",
+                  display: "flex",
+                  alignItems: "center",
+                  mb: 4,
+                }}
+              >
+                <SearchPosts />
+              </Paper>
 
-            <Card sx={{ mb: 4, backgroundColor: "#2d3748", color: "white" }}>
-              <CardHeader
-                title="Create a Blog Post"
-                titleTypographyProps={{ variant: "h6", color: "white" }}
-              />
-              <CardContent>
-                <form onSubmit={handleSubmit}>
-                  <TextField
-                    fullWidth
-                    label="Blog Title"
-                    variant="outlined"
-                    margin="normal"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    InputProps={{
-                      style: { backgroundColor: "#4a5568", color: "white" },
-                    }}
-                    InputLabelProps={{
-                      style: { color: "white" },
-                    }}
-                  />
-                  <TextField
-                    fullWidth
-                    label="Write your post here..."
-                    variant="outlined"
-                    margin="normal"
-                    name="content"
-                    value={formData.content}
-                    onChange={handleChange}
-                    multiline
-                    rows={4}
-                    InputProps={{
-                      style: { backgroundColor: "#4a5568", color: "white" },
-                    }}
-                    InputLabelProps={{
-                      style: { color: "white" },
-                    }}
-                  />
-                  <Box
-                    mt={2}
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                  >
-                    <IconButton color="primary" component="label">
-                      <UploadButton
-                        endpoint="imageUploader"
-                        onClientUploadComplete={(res) => {
-                          setFormData({ ...formData, imageUrl: res[0].url });
-                        }}
-                        onUploadError={(error) => {
-                          alert(`ERROR! ${error.message}`);
-                        }}
-                      />
-                    </IconButton>
-                    {formData.imageUrl && (
-                      <img
-                        src={formData.imageUrl}
-                        alt="Uploaded"
-                        style={{
-                          maxHeight: "200px",
-                          borderRadius: "8px",
-                          marginTop: "10px",
-                          objectFit: "cover",
-                          width: "100%",
-                        }}
-                      />
-                    )}
-                    <Button
-                      disabled={mutation.isPending}
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      sx={{ mt: 2 }}
-                    >
-                      Post
-                    </Button>
-                  </Box>
-                </form>
-              </CardContent>
-            </Card>
-
-            {/* Blog Posts */}
-            <Box sx={{ mt: 4 }}>
-              {creatingPost && (
-                <Card sx={{ mb: 4 }}>
-                  <CardContent>
+              <Card sx={{ mb: 4, backgroundColor: "#2d3748", color: "white" }}>
+                <CardHeader
+                  title="Create a Blog Post"
+                  titleTypographyProps={{ variant: "h6", color: "white" }}
+                />
+                <CardContent>
+                  <form onSubmit={handleSubmit}>
+                    <TextField
+                      fullWidth
+                      label="Blog Title"
+                      variant="outlined"
+                      margin="normal"
+                      name="title"
+                      value={formData.title}
+                      onChange={handleChange}
+                      InputProps={{
+                        style: { backgroundColor: "#4a5568", color: "white" },
+                      }}
+                      InputLabelProps={{
+                        style: { color: "white" },
+                      }}
+                    />
+                    <TextField
+                      fullWidth
+                      label="Write your post here..."
+                      variant="outlined"
+                      margin="normal"
+                      name="content"
+                      value={formData.content}
+                      onChange={handleChange}
+                      multiline
+                      rows={4}
+                      InputProps={{
+                        style: { backgroundColor: "#4a5568", color: "white" },
+                      }}
+                      InputLabelProps={{
+                        style: { color: "white" },
+                      }}
+                    />
                     <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: 200,
-                      }}
+                      mt={2}
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
                     >
-                      <CircularProgress />
+                      <IconButton color="primary" component="label">
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res) => {
+                            setFormData({ ...formData, imageUrl: res[0].url });
+                          }}
+                          onUploadError={(error) => {
+                            alert(`ERROR! ${error.message}`);
+                          }}
+                        />
+                      </IconButton>
+                      {formData.imageUrl && (
+                        <img
+                          src={formData.imageUrl}
+                          alt="Uploaded"
+                          style={{
+                            maxHeight: "200px",
+                            borderRadius: "8px",
+                            marginTop: "10px",
+                            objectFit: "cover",
+                            width: "100%",
+                          }}
+                        />
+                      )}
+                      <Button
+                        disabled={mutation.isPending}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 2 }}
+                      >
+                        Post
+                      </Button>
                     </Box>
-                  </CardContent>
-                </Card>
-              )}
-              {newPost && (
-                <Card key={newPost?.postId} sx={{ mb: 4 }}>
-                  <Link href={`/ViewPost/${newPost?.postId}`} passHref>
-                    <CardHeader
-                      avatar={<Avatar src={newPost?.author?.profileImage} />}
-                      title={newPost?.author?.name}
-                      subheader={new Date(
-                        newPost?.createdAt
-                      ).toLocaleDateString()}
-                    />
-                    <CardContent>
-                      <Typography variant="h5" component="div">
-                        {truncateContent(newPost?.title, 150)}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {truncateContent(newPost?.content, 250)}
-                      </Typography>
-                    </CardContent>
-                  </Link>
-                  {newPost?.imageUrl && (
-                    <CardMedia
-                      component="img"
-                      height="194"
-                      image={newPost?.imageUrl}
-                      alt={newPost?.title}
-                      sx={{
-                        padding: 1,
-                      }}
-                    />
-                  )}
+                  </form>
+                </CardContent>
+              </Card>
 
-                  <CardActions disableSpacing>
-                    {renderLikeButton(newPost)}
-                    <Button size="small" color="primary">
-                      {newPost?.comments?.length} Comments
-                    </Button>
-                  </CardActions>
-                </Card>
-              )}
-              {data
-                ?.slice()
-                .reverse()
-                .map((post, index) => (
-                  <Card key={index} sx={{ mb: 4 }}>
-                    <Link href={`/ViewPost/${post?.postId}`} passHref>
+              {/* Blog Posts */}
+              <Box sx={{ mt: 4 }}>
+                {creatingPost && (
+                  <Card sx={{ mb: 4 }}>
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: 200,
+                        }}
+                      >
+                        <CircularProgress />
+                      </Box>
+                    </CardContent>
+                  </Card>
+                )}
+                {newPost && (
+                  <Card key={newPost?.postId} sx={{ mb: 4 }}>
+                    <Link href={`/ViewPost/${newPost?.postId}`} passHref>
                       <CardHeader
-                        avatar={<Avatar src={post?.author?.profileImage} />}
-                        title={post?.author?.name}
-                        // subheader={new Date(
-                        //   post?.createdAt
-                        // ).toLocaleDateString()}
+                        avatar={<Avatar src={newPost?.author?.profileImage} />}
+                        title={newPost?.author?.name}
+                        subheader={new Date(
+                          newPost?.createdAt
+                        ).toLocaleDateString()}
                       />
                       <CardContent>
                         <Typography variant="h5" component="div">
-                          {truncateContent(post?.title, 150)}
+                          {truncateContent(newPost?.title, 150)}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {truncateContent(post?.content, 250)}
+                          {truncateContent(newPost?.content, 250)}
                         </Typography>
                       </CardContent>
                     </Link>
-                    {post?.imageUrl && (
+                    {newPost?.imageUrl && (
                       <CardMedia
                         component="img"
                         height="194"
-                        image={post?.imageUrl}
-                        alt={post?.title}
+                        image={newPost?.imageUrl}
+                        alt={newPost?.title}
                         sx={{
                           padding: 1,
                         }}
@@ -333,17 +313,60 @@ const Homepage = () => {
                     )}
 
                     <CardActions disableSpacing>
-                      {renderLikeButton(post)}
+                      {renderLikeButton(newPost)}
                       <Button size="small" color="primary">
-                        {post?.comments?.length} Comments
+                        {newPost?.comments?.length} Comments
                       </Button>
                     </CardActions>
                   </Card>
-                ))}
-            </Box>
+                )}
+                {data
+                  ?.slice()
+                  .reverse()
+                  .map((post, index) => (
+                    <Card key={index} sx={{ mb: 4 }}>
+                      <Link href={`/ViewPost/${post?.postId}`} passHref>
+                        <CardHeader
+                          avatar={<Avatar src={post?.author?.profileImage} />}
+                          title={post?.author?.name}
+                          // subheader={new Date(
+                          //   post?.createdAt
+                          // ).toLocaleDateString()}
+                        />
+                        <CardContent>
+                          <Typography variant="h5" component="div">
+                            {truncateContent(post?.title, 150)}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {truncateContent(post?.content, 250)}
+                          </Typography>
+                        </CardContent>
+                      </Link>
+                      {post?.imageUrl && (
+                        <CardMedia
+                          component="img"
+                          height="194"
+                          image={post?.imageUrl}
+                          alt={post?.title}
+                          sx={{
+                            padding: 1,
+                          }}
+                        />
+                      )}
+
+                      <CardActions disableSpacing>
+                        {renderLikeButton(post)}
+                        <Button size="small" color="primary">
+                          {post?.comments?.length} Comments
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  ))}
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      )}
     </>
   );
 };

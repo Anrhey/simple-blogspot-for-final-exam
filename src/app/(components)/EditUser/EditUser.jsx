@@ -13,12 +13,6 @@ const EditUser = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setToken(localStorage.getItem("token"));
-    }
-  }, []);
-
   const [formData, setFormData] = useState({
     email: "",
     name: "",
@@ -62,73 +56,95 @@ const EditUser = () => {
     mutation.mutate();
   };
 
-  if (isLoading) return <div>Loading Data...</div>;
-  if (isError) return <div>Error loading posts</div>;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+    }
+  }, []); // Run this effect only once on mount
+
+  useEffect(() => {
+    if (token === null) return; // Wait for the token to be set
+
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router, token]); // Run this effect whenever the router or token changes
+
+  if (token === null && isLoading) {
+    router.push("/login"); // Show a loading spinner while checking the token
+  }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.loginBox}>
-        <h2 className={styles.title}>Create an account</h2>
-        <form onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email: {"(Email cant be edited)"}
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={styles.input}
-              placeholder="Email cant be edited"
-              disabled
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="name" className={styles.label}>
-              Name:
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={styles.input}
-              placeholder="Name"
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <UploadButton
-              endpoint="imageUploader"
-              onClientUploadComplete={(res) => {
-                console.log("Files: ", res);
-                setFormData({ profileImage: res[0].url });
-              }}
-              onUploadError={(error) => {
-                alert(`ERROR! ${error.message}`);
-              }}
-            />
-            {formData.profileImage.length ? (
-              <div>
-                <img
-                  src={formData.profileImage}
-                  alt="my image"
-                  className={styles.image}
-                  value={formData.profileImage}
+    <>
+      {!token ? (
+        <div>No token received Please login</div>
+      ) : (
+        <div className={styles.container}>
+          <div className={styles.loginBox}>
+            <h2 className={styles.title}>Create an account</h2>
+            <form onSubmit={handleSubmit}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="email" className={styles.label}>
+                  Email: {"(Email cant be edited)"}
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={styles.input}
+                  placeholder="Email cant be edited"
+                  disabled
                 />
               </div>
-            ) : null}
-          </div>
+              <div className={styles.inputGroup}>
+                <label htmlFor="name" className={styles.label}>
+                  Name:
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={styles.input}
+                  placeholder="Name"
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <UploadButton
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res) => {
+                    console.log("Files: ", res);
+                    setFormData({ profileImage: res[0].url });
+                  }}
+                  onUploadError={(error) => {
+                    alert(`ERROR! ${error.message}`);
+                  }}
+                />
+                {formData.profileImage.length ? (
+                  <div>
+                    <img
+                      src={formData.profileImage}
+                      alt="my image"
+                      className={styles.image}
+                      value={formData.profileImage}
+                    />
+                  </div>
+                ) : null}
+              </div>
 
-          <button type="submit" className={styles.loginButton}>
-            Update Details
-          </button>
-          <Link href={"/profile-feed"}></Link>
-        </form>
-      </div>
-    </div>
+              <button type="submit" className={styles.loginButton}>
+                Update Details
+              </button>
+              <Link href={"/profile-feed"}></Link>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
