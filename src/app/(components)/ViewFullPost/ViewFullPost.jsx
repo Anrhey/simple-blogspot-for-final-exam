@@ -59,7 +59,7 @@ const ViewFullPost = () => {
 
   return (
     <>
-      {!token ? (
+      {!token && isLoading ? (
         <div>
           <CircularProgress />
         </div>
