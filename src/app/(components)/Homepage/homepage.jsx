@@ -29,8 +29,8 @@ import { UploadButton } from "../../../utils/uploadthing";
 import SearchPosts from "../SearchPost/SearchPost";
 import { likePost, fetchPost } from "./actions";
 import { createPost } from "../CreatePost/actions";
+import Cookies from "js-cookie";
 import Link from "next/link";
-import Cookies from "js-cookies";
 
 const Homepage = () => {
   // const [token, setToken] = useState(null);
