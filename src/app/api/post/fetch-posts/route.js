@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
+export const revalidate = 1;
 
 const handler = async (req) => {
   try {
